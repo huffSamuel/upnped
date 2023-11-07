@@ -11,5 +11,6 @@ import 'package:xml/xml.dart';
 import 'ssdp.dart' as ssdp;
 
 part 'src/upnp/device.dart';
-part 'src/messages.dart';
+part 'src/network_event.dart';
 part 'src/upnp/server.dart';
+part 'src/upnp/device_builder.dart';

@@ -6,6 +6,7 @@ class Server {
   late ssdp.Server _ssdp;
 
   final _devices = StreamController<UPnPDevice>.broadcast();
+  final DeviceBuilder _deviceBuilder;
 
   /// A broadcast stream of UPnP devices discovered.
   Stream<UPnPDevice> get devices => _devices.stream;
@@ -15,7 +16,8 @@ class Server {
   /// {ssdpServer} is intended for testing.
   Server._({
     ssdp.Server? ssdpServer,
-  }) {
+    DeviceBuilder deviceBuilder = const DeviceBuilder(),
+  }) : _deviceBuilder = deviceBuilder {
     _ssdp = ssdpServer ??= ssdp.Server();
   }
 
@@ -53,7 +55,7 @@ class Server {
     _clientSub?.cancel();
 
     _clientSub = _ssdp.discovered.listen((event) {
-      _getRootDevice(event, effectiveLocale);
+      _deviceBuilder.build(event, effectiveLocale).then(_devices.add);
     });
 
     await _ssdp.start(
@@ -70,97 +72,4 @@ class Server {
         maxResponseTime: maxResponseTime,
         searchTarget: searchTarget,
       );
-
-  Future<ServiceAggregate> _getService(
-    ssdp.Device client,
-    Map<String, String> headers,
-    ServiceDocument document,
-  ) async {
-    final uri = Uri(
-      scheme: client.location!.scheme,
-      host: client.location!.host,
-      port: client.location!.port,
-      pathSegments: document.scpdurl.pathSegments,
-    );
-
-    Service? service;
-
-    try {
-      final response = await http.get(uri, headers: headers);
-      service = Service.fromXml(
-        XmlDocument.parse(
-          response.body,
-        ),
-      );
-    } catch (err) {
-      service = null;
-    }
-
-    return ServiceAggregate(
-      document,
-      service,
-      uri,
-    );
-  }
-
-  Future<DeviceAggregate> _getDevice(
-    ssdp.Device client,
-    DeviceDocument device,
-    Map<String, String> headers,
-  ) async {
-    final services = await Future.wait(
-      device.services.map(
-        (service) => _getService(
-          client,
-          headers,
-          service,
-        ),
-      ),
-    );
-
-    final devices = await Future.wait(
-      device.devices.map(
-        (device) => _getDevice(
-          client,
-          device,
-          headers,
-        ),
-      ),
-    );
-
-    return DeviceAggregate(
-      device,
-      services,
-      devices,
-    );
-  }
-
-  Future<UPnPDevice> _getRootDevice(
-    ssdp.Device client,
-    String locale,
-  ) async {
-    final headers = {HttpHeaders.acceptLanguageHeader: locale};
-
-    final response = await http.get(
-      client.location!,
-      headers: headers,
-    );
-
-    final deviceDocument =
-        XmlDocument.parse(response.body).rootElement.getElement('device');
-    final device = DeviceDocument.fromXml(deviceDocument!);
-
-    final aggregate = await _getDevice(
-      client,
-      device,
-      headers,
-    );
-
-    return UPnPDevice(
-      client,
-      device,
-      aggregate.services,
-      aggregate.devices,
-    );
-  }
 }

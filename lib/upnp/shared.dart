@@ -12,4 +12,4 @@ part 'src/shared/state.dart';
 
 final networkController = StreamController<NetworkEvent>.broadcast();
 
-Stream<NetworkEvent> get network => networkController.stream;
+Stream<NetworkEvent> get networkEvents => networkController.stream;

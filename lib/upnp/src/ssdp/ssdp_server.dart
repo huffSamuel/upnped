@@ -73,24 +73,28 @@ class Server with EnsureUserAgentMixin {
         _interfaces,
         _ssdpPort,
         _onSocketEvent,
+        multicastHops: multicastHops,
       ),
       _socketBuilder.build(
         InternetAddress.anyIPv4,
         _interfaces,
         _anyPort,
         _onSocketEvent,
+        multicastHops: multicastHops,
       ),
       _socketBuilder.build(
         InternetAddress.anyIPv6,
         _interfaces,
         _ssdpPort,
         _onSocketEvent,
+        multicastHops: multicastHops,
       ),
       _socketBuilder.build(
         InternetAddress.anyIPv6,
         _interfaces,
         _anyPort,
         _onSocketEvent,
+        multicastHops: multicastHops,
       ),
     ]);
 
@@ -152,7 +156,6 @@ class Server with EnsureUserAgentMixin {
     if (packet == null) {
       return;
     }
-
 
     final device = Device.parse(packet.data);
     networkController.add(NotifyEvent(device.location!, device.toString()));
