@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:fl_upnp/upnp/control_point.dart';
+import 'package:fl_upnp/upnp/control.dart';
 import 'package:xml/xml.dart';
 
 void main() {

@@ -32,11 +32,11 @@ class Device with EquatableMixin {
 
   Device._(this._raw, this._parsed);
 
-  factory Device.fromPacket(Datagram packet) {
-    final data = utf8.decode(packet.data);
+  factory Device.parse(Uint8List data) {
+    final d = utf8.decode(data);
     Map<String, String> parsed = {};
 
-    for (var segment in data.split('\r\n')) {
+    for (var segment in d.split('\r\n')) {
       final colon = segment.indexOf(':');
 
       if (colon != -1) {
@@ -46,7 +46,7 @@ class Device with EquatableMixin {
       }
     }
 
-    return Device._(data, parsed);
+    return Device._(d, parsed);
   }
 
   @override

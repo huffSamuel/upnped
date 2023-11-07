@@ -1,22 +1,33 @@
 part of upnp;
 
-class UPnPServer {
+/// A UPnP Server.
+class Server {
+  StreamSubscription? _clientSub;
   late ssdp.Server _ssdp;
-  late String _userAgent;
 
-  final _messages = StreamController<NetworkMessage>.broadcast();
   final _devices = StreamController<UPnPDevice>.broadcast();
 
-  Stream<NetworkMessage> get messages => _messages.stream;
+  /// A broadcast stream of UPnP devices discovered.
   Stream<UPnPDevice> get devices => _devices.stream;
 
-  StreamSubscription? _clientSub;
-
-  UPnPServer({
+  /// Create a new server.
+  ///
+  /// {ssdpServer} is intended for testing.
+  Server._({
     ssdp.Server? ssdpServer,
   }) {
-    this._ssdp = ssdpServer ??= ssdp.Server();
+    _ssdp = ssdpServer ??= ssdp.Server();
   }
+
+  factory Server() => Server._();
+
+  @visibleForTesting
+  factory Server.forTest({
+    required ssdp.Server ssdpServer,
+  }) =>
+      Server._(
+        ssdpServer: ssdpServer,
+      );
 
   /// Stop listening for UPnP devices on the network.
   Future<void> stop() {
@@ -26,7 +37,7 @@ class UPnPServer {
     return _ssdp.stop();
   }
 
-  /// Start listening for UPnP devices on the network.
+  /// Start the server and begin listening for devices.
   ///
   /// Devices that emit regular NOTIFY messages may be found before calling the
   /// `search` method.
@@ -41,7 +52,7 @@ class UPnPServer {
 
     _clientSub?.cancel();
 
-    _clientSub = _ssdp.clients.listen((event) {
+    _clientSub = _ssdp.discovered.listen((event) {
       _getRootDevice(event, effectiveLocale);
     });
 

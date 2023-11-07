@@ -1,24 +1,29 @@
 part of ssdp;
 
-const _multicastTemplate = '''M-SEARCH * HTTP/1.1
-HOST: 239.255.255.250:1900
-MAN: "ssdp:discover"
-MX: %s
-ST: %s
-USER-AGENT: %s
-
+const _multicastTemplate = '''M-SEARCH * HTTP/1.1\r
+HOST: 239.255.255.250:1900\r
+MAN: "ssdp:discover"\r
+MX: %s\r
+ST: %s\r
+USER-AGENT: %s \r
+\r
 ''';
 
 class MSearchRequest {
-  /// Template message
-  final String template;
+  final String message;
 
-  /// Properties to fill into the template.
-  final List<String> props;
+  /// Search target.
+  final String st;
+
+  /// Maximum response time.
+  ///
+  /// Only provided for multicast requests.
+  final int? mx;
 
   const MSearchRequest._({
-    required this.template,
-    required this.props,
+    required this.message,
+    required this.st,
+    required this.mx,
   });
 
   /// Create a multicast M-Search request.
@@ -37,12 +42,9 @@ class MSearchRequest {
     assert(mx > 0, 'mx must be greater than 0');
 
     return MSearchRequest._(
-      template: _multicastTemplate,
-      props: [
-        mx.toString(),
-        st,
-        userAgent,
-      ],
+      message: sprintf(_multicastTemplate, [mx.toString(), st, userAgent]),
+      st: st,
+      mx: mx,
     );
   }
 
@@ -50,6 +52,6 @@ class MSearchRequest {
 
   @override
   String toString() {
-    return sprintf(template, []);
+    return message;
   }
 }

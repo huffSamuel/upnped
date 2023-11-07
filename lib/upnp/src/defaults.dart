@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fl_upnp/upnp/upnp.dart';
+import 'package:fl_upnp/upnp/ssdp.dart';
 
 const defaultMulticastHops = 1;
 const defaultResponseSeconds = 5;

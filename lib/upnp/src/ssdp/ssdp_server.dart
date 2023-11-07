@@ -11,19 +11,36 @@ InternetAddress _group(InternetAddressType addressType) {
       : _v6Multicast;
 }
 
-class Server {
-  final _clients = StreamController<Device>();
+class Server with EnsureUserAgentMixin {
+  final _discoveredController = StreamController<Device>.broadcast();
+  final List<SocketProxy> _sockets = [];
+  final SocketBuilder _socketBuilder;
 
-  final List<RawDatagramSocket> _sockets = [];
-  final List<StreamSubscription> _subscriptions = [];
-
-  late String _userAgent;
   late List<NetworkInterface> _interfaces;
 
   bool _running = false;
 
+  Server._({
+    UserAgentFactory userAgentFactory = const PlatformUserAgentFactory(),
+    SocketBuilder socketBuilder = const SocketBuilder(),
+  }) : _socketBuilder = socketBuilder {
+    super.userAgentFactory = userAgentFactory;
+  }
+
+  factory Server() => Server._();
+
+  @visibleForTesting
+  factory Server.forTest({
+    required UserAgentFactory userAgentFactory,
+    required SocketBuilder socketBuilder,
+  }) =>
+      Server._(
+        userAgentFactory: userAgentFactory,
+        socketBuilder: socketBuilder,
+      );
+
   /// A stream that emits whenever a new device is discovered.
-  Stream<Device> get clients => _clients.stream;
+  Stream<Device> get discovered => _discoveredController.stream;
 
   /// Indicates if the server is running.
   bool get started => _running;
@@ -34,11 +51,7 @@ class Server {
       return;
     }
 
-    await Future.wait(_subscriptions.map((e) => e.cancel()));
-
-    for (final socket in _sockets) {
-      _destroySocket(socket);
-    }
+    await Future.wait(_sockets.map((e) => e.destroy()));
 
     _running = false;
   }
@@ -51,19 +64,34 @@ class Server {
       throw StateError('cannot start while running');
     }
 
-    final [ua, interfaces] = await Future.wait([
-      userAgent(),
-      NetworkInterface.list(),
-    ]);
-
-    _userAgent = ua as String;
-    _interfaces = interfaces as List<NetworkInterface>;
+    await ensureUserAgent();
+    _interfaces = await NetworkInterface.list();
 
     await Future.wait([
-      _createSocket(InternetAddress.anyIPv4, _interfaces, _ssdpPort),
-      _createSocket(InternetAddress.anyIPv4, _interfaces, _anyPort),
-      _createSocket(InternetAddress.anyIPv6, _interfaces, _ssdpPort),
-      _createSocket(InternetAddress.anyIPv6, _interfaces, _anyPort),
+      _socketBuilder.build(
+        InternetAddress.anyIPv4,
+        _interfaces,
+        _ssdpPort,
+        _onSocketEvent,
+      ),
+      _socketBuilder.build(
+        InternetAddress.anyIPv4,
+        _interfaces,
+        _anyPort,
+        _onSocketEvent,
+      ),
+      _socketBuilder.build(
+        InternetAddress.anyIPv6,
+        _interfaces,
+        _ssdpPort,
+        _onSocketEvent,
+      ),
+      _socketBuilder.build(
+        InternetAddress.anyIPv6,
+        _interfaces,
+        _anyPort,
+        _onSocketEvent,
+      ),
     ]);
 
     _running = true;
@@ -90,7 +118,7 @@ class Server {
 
     final completer = Completer<void>();
     final request = MSearchRequest.multicast(
-      _userAgent,
+      currentUserAgent!,
       mx: maxResponseTime.inSeconds,
       st: searchTarget,
     );
@@ -103,6 +131,9 @@ class Server {
 
       try {
         socket.send(data, target, _ssdpPort);
+
+        networkController.add(MSearchEvent(request.toString()));
+        // TODO: Add message sent event
       } on SocketException {
         // TODO: verbose log error
       }
@@ -115,64 +146,6 @@ class Server {
     return completer.future;
   }
 
-  void _destroySocket(RawDatagramSocket socket) {
-    final group = _group(socket.address.type);
-
-    try {
-      socket.leaveMulticast(group);
-    } on OSError {
-      // TODO: verbose log
-    }
-
-    for (final interface in _interfaces) {
-      try {
-        socket.leaveMulticast(group, interface);
-      } on OSError {
-        // TODO: Verbose log
-      }
-    }
-
-    socket.close();
-  }
-
-  Future<void> _createSocket(
-    InternetAddress address,
-    List<NetworkInterface> interfaces,
-    int port,
-  ) async {
-    final socket = await RawDatagramSocket.bind(
-      address,
-      port,
-      reuseAddress: true,
-      reusePort: !Platform.isAndroid,
-    )
-      ..broadcastEnabled = true
-      ..readEventsEnabled = true
-      ..writeEventsEnabled = false
-      ..multicastLoopback = false
-      ..multicastHops = 1; // TODO: from options
-
-    _subscriptions.add(socket.listen((event) => _onSocketEvent(socket, event)));
-
-    final multicast = _group(address.type);
-
-    try {
-      socket.joinMulticast(multicast);
-    } on OSError {
-      // TODO: Verbose log error
-    }
-
-    for (var interface in interfaces) {
-      try {
-        socket.joinMulticast(multicast, interface);
-      } on OSError {
-        // TODO: Verbose log error
-      }
-    }
-
-    _sockets.add(socket);
-  }
-
   void _onSocketEvent(RawDatagramSocket socket, RawSocketEvent event) {
     final packet = socket.receive();
 
@@ -180,8 +153,12 @@ class Server {
       return;
     }
 
+
+    final device = Device.parse(packet.data);
+    networkController.add(NotifyEvent(device.location!, device.toString()));
+
     try {
-      _clients.add(Device.fromPacket(packet));
+      _discoveredController.add(device);
     } catch (err) {
       // TODO: If logging enabled print the log
     }

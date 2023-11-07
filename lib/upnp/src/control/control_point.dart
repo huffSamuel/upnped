@@ -1,24 +1,50 @@
 part of control;
 
+/// A control point for controlling UPnP devices.
+class ControlPoint with EnsureUserAgentMixin {
+  late http.Client _client;
+  late ActionRequestBuilder _builder;
 
-
-class ControlPoint {
-  final http.Client? _client;
-
-  const ControlPoint({
+  ControlPoint._({
     http.Client? client,
-  }) : _client = client;
+    ActionRequestBuilder builder = const ActionRequestBuilder(),
+    UserAgentFactory userAgentFactory = const PlatformUserAgentFactory(),
+  }) {
+    _client = client ?? http.Client();
+    _builder = builder;
+    super.userAgentFactory = userAgentFactory;
+  }
 
-  http.Client get _effectiveClient => _client ?? http.Client();
+  /// Creates a new ControlPoint.
+  factory ControlPoint() => ControlPoint._();
+
+  @visibleForTesting
+  factory ControlPoint.forTest({
+    http.Client? client,
+    ActionRequestBuilder builder = const ActionRequestBuilder(),
+    UserAgentFactory userAgentFactory = const PlatformUserAgentFactory(),
+  }) =>
+      ControlPoint._(
+        client: client,
+        builder: builder,
+        userAgentFactory: userAgentFactory,
+      );
 
   Future<ActionResponse> invoke(
-    ActionRequest request,
+    ActionRequestParams params,
   ) async {
-    final response = await _effectiveClient.post(
+    await ensureUserAgent();
+
+    final request = _builder.build(params);
+
+    // TODO: Handle timing out and throwing errors
+    final response = await _client.post(
       request.uri,
       headers: request.headers,
       body: request.body,
     );
+
+    networkController.add(HttpEvent(response));
 
     final xml = XmlDocument.parse(response.body);
 
@@ -31,7 +57,3 @@ class ControlPoint {
     return ActionResponse.fromXml(xml);
   }
 }
-
-
-
-

@@ -24,49 +24,45 @@ class ActionRequestBuilder {
 
   Uri _controlUrl(
     Uri address,
-    ServiceDocument document,
+    String controlPath,
   ) =>
       Uri(
         scheme: address.scheme,
         host: address.host,
         port: address.port,
-        path: document.controlUrl.path,
+        path: controlPath,
       );
 
   /// Create a new `ActionRequest`.
-  Future<ActionRequest> build(
-    ServiceAggregate service,
-    String actionName,
-    Map<String, dynamic> args,
-  ) async {
-    final ua = _userAgent ?? await userAgent();
-
+  ActionRequest build(
+    ActionRequestParams params,
+  ) {
     final urn = sprintf(
       _soapUrn,
       [
-        service.document.serviceType,
-        service.document.serviceVersion,
+        params.serviceType,
+        params.serviceVersion,
       ],
     );
 
     final body = sprintf(
       _soapBody,
       [
-        actionName,
+        params.actionName,
         urn,
-        _args(args),
-        actionName,
+        _args(params.arguments),
+        params.actionName,
       ],
     );
 
-    final url = _controlUrl(service.location, service.document);
+    final url = _controlUrl(params.uri, params.controlPath);
 
     final headers = {
       ..._soapHeaders,
       HttpHeaders.contentLengthHeader: body.length.toString(),
       HttpHeaders.hostHeader: '${url.host}:${url.port}',
-      _soapActionHeader: '"$urn#$actionName"',
-      HttpHeaders.userAgentHeader: ua
+      _soapActionHeader: '"$urn#${params.actionName}"',
+      HttpHeaders.userAgentHeader: _userAgent ?? currentUserAgent!,
     };
 
     return ActionRequest(

@@ -43,8 +43,8 @@ class SpecVersion {
 
   factory SpecVersion.fromXml(XmlNode node) {
     return SpecVersion(
-      major: int.parse(node.getElement('major')!.text),
-      minor: int.parse(node.getElement('minor')!.text),
+      major: int.parse(node.getElement('major')!.value!),
+      minor: int.parse(node.getElement('minor')!.value!),
     );
   }
 }
@@ -156,18 +156,18 @@ class DeviceDocument {
     final manufacturerUrl = xml.getElement('manufacturerURL');
 
     return DeviceDocument(
-      deviceType: DeviceType(uri: xml.getElement('deviceType')!.text),
-      friendlyName: xml.getElement('friendlyName')!.text,
-      manufacturer: xml.getElement('manufacturer')!.text,
+      deviceType: DeviceType(uri: xml.getElement('deviceType')!.value!),
+      friendlyName: xml.getElement('friendlyName')!.value!,
+      manufacturer: xml.getElement('manufacturer')!.value!,
       manufacturerUrl:
-          manufacturerUrl != null ? Uri.parse(manufacturerUrl.text) : null,
-      modelDescription: xml.getElement('modelDescription')?.text,
-      modelName: xml.getElement('modelName')!.text,
-      modelNumber: xml.getElement('modelNumber')?.text,
-      modelUrl: modelUrl != null ? Uri.parse(modelUrl.text) : null,
-      serialNumber: xml.getElement('serialNumber')?.text,
-      udn: xml.getElement('UDN')!.text,
-      upc: xml.getElement('UPC')?.text,
+          manufacturerUrl != null ? Uri.parse(manufacturerUrl.value!) : null,
+      modelDescription: xml.getElement('modelDescription')?.value!,
+      modelName: xml.getElement('modelName')!.value!,
+      modelNumber: xml.getElement('modelNumber')?.value!,
+      modelUrl: modelUrl != null ? Uri.parse(modelUrl.value!) : null,
+      serialNumber: xml.getElement('serialNumber')?.value!,
+      udn: xml.getElement('UDN')!.value!,
+      upc: xml.getElement('UPC')?.value!,
       iconList: _nodeMapper(
         xml.getElement('iconList'),
         'icon',
@@ -184,7 +184,7 @@ class DeviceDocument {
         DeviceDocument.fromXml,
       ),
       presentationUrl:
-          presentationUrl != null ? Uri.parse(presentationUrl.text) : null,
+          presentationUrl != null ? Uri.parse(presentationUrl.value!) : null,
     );
   }
 }
@@ -231,17 +231,17 @@ class ServiceDocument {
   });
 
   factory ServiceDocument.fromXml(XmlNode xml) {
-    final scpdurl = xml.getElement('SCPDURL')?.text;
-    final controlUrl = xml.getElement('controlURL')?.text;
-    final eventSubUrl = xml.getElement('eventSubURL')?.text;
-    final serviceType = xml.getElement('serviceType')!.text;
+    final scpdurl = xml.getElement('SCPDURL')?.value;
+    final controlUrl = xml.getElement('controlURL')?.value;
+    final eventSubUrl = xml.getElement('eventSubURL')?.value;
+    final serviceType = xml.getElement('serviceType')!.value!;
 
     final serviceTypeFields = serviceType.split(':');
 
     return ServiceDocument(
       serviceType: serviceTypeFields[serviceTypeFields.length - 2],
       serviceVersion: serviceTypeFields[serviceTypeFields.length - 1],
-      serviceId: ServiceId.parse(xml.getElement('serviceId')!.text),
+      serviceId: ServiceId.parse(xml.getElement('serviceId')!.value!),
       scpdurl: Uri.parse(scpdurl!),
       controlUrl: Uri.parse(controlUrl!),
       eventSubUrl: Uri.parse(eventSubUrl!),
@@ -304,11 +304,11 @@ class DeviceIcon {
 
   factory DeviceIcon.fromXml(XmlNode xml) {
     return DeviceIcon(
-      mimeType: xml.getElement('mimetype')!.text,
-      width: int.parse(xml.getElement('width')!.text),
-      height: int.parse(xml.getElement('height')!.text),
-      depth: xml.getElement('depth')!.text,
-      url: Uri.parse(xml.getElement('url')!.text),
+      mimeType: xml.getElement('mimetype')!.value!,
+      width: int.parse(xml.getElement('width')!.value!),
+      height: int.parse(xml.getElement('height')!.value!),
+      depth: xml.getElement('depth')!.value!,
+      url: Uri.parse(xml.getElement('url')!.value!),
     );
   }
 }
@@ -385,7 +385,7 @@ class ServiceAction {
     XmlNode xml,
   ) {
     return ServiceAction(
-      name: xml.getElement('name')!.text,
+      name: xml.getElement('name')!.value!,
       arguments: _nodeMapper(
         xml.getElement('argumentList'),
         'argument',
@@ -461,10 +461,10 @@ class Argument {
 
   factory Argument.fromXml(XmlNode xml) {
     return Argument(
-      name: xml.getElement('name')!.text,
-      direction: xml.getElement('direction')!.text,
-      retval: xml.getElement('retval')?.text,
-      relatedStateVariable: xml.getElement('relatedStateVariable')!.text,
+      name: xml.getElement('name')!.value!,
+      direction: xml.getElement('direction')!.value!,
+      retval: xml.getElement('retval')?.value,
+      relatedStateVariable: xml.getElement('relatedStateVariable')!.value!,
     );
   }
 }
@@ -509,9 +509,9 @@ class StateVariable {
     return StateVariable(
       sendEvents: sendEvents != null ? sendEvents == 'yes' : false,
       multicast: multicast != null ? multicast == 'yes' : false,
-      name: xml.getElement('name')!.text,
+      name: xml.getElement('name')!.value!,
       dataType: DataType.fromXml(xml.getElement('dataType')!),
-      defaultValue: xml.getElement('defaultValue')?.text,
+      defaultValue: xml.getElement('defaultValue')?.value,
       allowedValues: _nodeMapper(
         xml.getElement('allowedValueList'),
         'allowedValue',
@@ -652,11 +652,11 @@ class AllowedValueRange {
   });
 
   factory AllowedValueRange.fromXml(XmlNode xml) {
-    String? step = xml.getElement('step')?.text;
+    String? step = xml.getElement('step')?.value;
 
     return AllowedValueRange(
-      minimum: xml.getElement('minimum')!.text,
-      maximum: xml.getElement('maximum')!.text,
+      minimum: xml.getElement('minimum')!.value!,
+      maximum: xml.getElement('maximum')!.value!,
       step: step == null ? 1 : int.parse(step),
     );
   }

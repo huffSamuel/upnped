@@ -1,4 +1,4 @@
-part of upnp;
+part of ssdp;
 
 class SearchTarget {
   static const String all = 'ssdp:all';
@@ -9,7 +9,8 @@ class SearchTarget {
   static String serviceType(String serviceType, String ver) =>
       ('urn:schemas-upnp-org:service:$serviceType:$ver');
   static String vendorDomain(String domain, String deviceType, String ver) =>
-      ('urn:${domain.replaceAll('.', '-')}:device:$deviceType:$ver');
+      ('urn:${_sanitize(domain)}:device:$deviceType:$ver');
   static String vendorService(String domain, String serviceType, String ver) =>
-      ('urn:${domain.replaceAll('.', '-')}:service:$serviceType:$ver');
+      ('urn:${_sanitize(domain)}:service:$serviceType:$ver');
+  static String _sanitize(String domain) => domain.replaceAll('.', '-');
 }

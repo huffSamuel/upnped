@@ -11,7 +11,7 @@ enum MessageDirection {
   outgoing,
 }
 
-abstract class NetworkMessage {
+abstract class NetworkEvent {
   final MessageDirection direction;
   final MessageProtocol protocol;
   final DateTime time;
@@ -19,7 +19,7 @@ abstract class NetworkMessage {
   final String? from;
   final String? to;
 
-  NetworkMessage({
+  NetworkEvent({
     required this.direction,
     required this.protocol,
     required this.messageType,
@@ -28,10 +28,10 @@ abstract class NetworkMessage {
   }) : time = DateTime.now();
 }
 
-class SearchRequest extends NetworkMessage {
+class MSearchEvent extends NetworkEvent {
   final String content;
 
-  SearchRequest(this.content)
+  MSearchEvent(this.content)
       : super(
           direction: MessageDirection.outgoing,
           protocol: MessageProtocol.ssdp,
@@ -39,16 +39,17 @@ class SearchRequest extends NetworkMessage {
           from: '0.0.0.0',
         );
 
+  @override
   toString() {
-    return this.content;
+    return content;
   }
 }
 
-class NotifyResponse extends NetworkMessage {
+class NotifyEvent extends NetworkEvent {
   final String content;
   final Uri uri;
 
-  NotifyResponse(this.uri, this.content)
+  NotifyEvent(this.uri, this.content)
       : super(
           direction: MessageDirection.incoming,
           protocol: MessageProtocol.ssdp,
@@ -56,16 +57,17 @@ class NotifyResponse extends NetworkMessage {
           from: uri.host,
         );
 
+  @override
   toString() {
-    return this.content;
+    return content;
   }
 }
 
-class HttpMessage extends NetworkMessage {
+class HttpEvent extends NetworkEvent {
   final http.Response response;
   http.Request get request => response.request! as http.Request;
 
-  HttpMessage(
+  HttpEvent(
     this.response,
   ) : super(
           direction: MessageDirection.outgoing,
@@ -75,10 +77,11 @@ class HttpMessage extends NetworkMessage {
           to: response.request!.url.host,
         );
 
+  @override
   toString() {
-    var sb = StringBuffer('HTTP/1.1 ${this.response.statusCode}\n');
-    this.response.headers.forEach((k, v) => sb.writeln('$k: $v'));
-    sb.writeln(this.response.body);
+    var sb = StringBuffer('HTTP/1.1 ${response.statusCode}\n');
+    response.headers.forEach((k, v) => sb.writeln('$k: $v'));
+    sb.writeln(response.body);
     return sb.toString();
   }
 }

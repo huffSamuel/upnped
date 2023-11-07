@@ -1,39 +1,69 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# fl_upnp
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+fl_upnp is a Flutter library for discovering and controlling UPnP devices.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## Installation
 
-## Features
+Install from pub with:
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+```bash
+flutter pub add fl_upnp
+```
 
-## Getting started
+or by adding fl_upnp as a dependency in `pubspec.yaml`:
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+```yaml
+dependencies:
+  fl_upnp: <latest_version>
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+### Discover devices
 
 ```dart
-const like = 'sample';
+import 'package:fl_upnp/fl_upnp.dart' as upnp;
+
+Future<void> main() async {
+    final server = upnp.Server();
+    final sub = server.devices.listen((device) => print('Found a device'));
+
+    await server.initialize();
+    await server.search();
+}
 ```
 
-## Additional information
+### Control devices
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+This snippet assumes that the `_findMyDevice()` function uses the code from [discover](Discover) to find a device.
+
+```dart
+import 'package:fl_upnp/fl_upnp.dart';
+
+Future<void> main() async {
+    final control = ControlPoint();
+    final requestBuilder = ActionRequestBuilder();
+
+    final device = await _findMyDevice();
+
+    final request = await requestBuilder.build(device.service, 'helloWorld', {
+        'name': 'Leonardo'
+    });
+    final response = control.invoke(request);
+}
+
+Future<UPnPDevice> _findMyDevice() {
+    // ...
+}
+
+```
+
+### Misc
+
+This library also provides a stream that emits all network activity for UPnP devices:
+
+```dart
+upnp.network.listen((message) => print(message));
+```

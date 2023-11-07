@@ -1,22 +1,29 @@
-import 'dart:io';
+part of shared;
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+abstract class UserAgentFactory {
+  Future<String> create();
+}
 
-/// Create the user agent string.
-///
-/// Parameters are provided for testing purposes only.
-Future<String> userAgent({
-  DeviceInfoPlugin? deviceInfo,
-  PackageInfo? packageInfo,
-}) async {
-  deviceInfo ??= DeviceInfoPlugin();
-  packageInfo ??= await PackageInfo.fromPlatform();
+/// Class that creates a user agent string from the current platform
+class PlatformUserAgentFactory implements UserAgentFactory {
+  final DeviceInfoPlugin? deviceInfo;
+  final PackageInfo? packageInfo;
 
-  final s = _pickStrategy();
-  final os = await s.create(deviceInfo);
+  const PlatformUserAgentFactory({
+    this.deviceInfo,
+    this.packageInfo,
+  });
 
-  return '$os UPnP/1.1 fl_upnp/${packageInfo.version}';
+  @override
+  Future<String> create() async {
+    final di = deviceInfo ?? DeviceInfoPlugin();
+    final pi = packageInfo ?? await PackageInfo.fromPlatform();
+
+    final s = _pickStrategy();
+    final os = await s.create(di);
+
+    return '$os UPnP/1.1 fl_upnp/${pi.version}';
+  }
 }
 
 OSVersionStrategy _pickStrategy() {
