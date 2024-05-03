@@ -1,5 +1,19 @@
-export 'upnp/upnp.dart';
-export 'upnp/control.dart'
-    show ControlError, ControlPoint, ActionResponse;
-export 'upnp/ssdp.dart' show Device, SearchTarget;
-export 'upnp/shared.dart' show networkEvents;
+library fl_upnp;
+
+export 'src/upnp/upnp.dart';
+export 'src/control/control.dart'
+    show
+        ActionInvocationException,
+        ActionRequestParams,
+        ControlPoint,
+        ActionResponse;
+export 'src/ssdp/ssdp.dart' show Device, SearchTarget;
+export 'src/shared/shared.dart'
+    show
+        UPnPObserver,
+        NetworkEvent,
+        HttpEvent,
+        NotifyEvent,
+        MSearchEvent,
+        NetworkEventDirection,
+        NetworkEventProtocol;
