@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:fl_upnp/src/shared/shared.dart';
+import 'package:upnped/src/shared/shared.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sprintf/sprintf.dart';
 

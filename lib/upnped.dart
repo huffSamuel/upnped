@@ -1,4 +1,4 @@
-library fl_upnp;
+library upnped;
 
 export 'src/upnp/upnp.dart';
 export 'src/control/control.dart'

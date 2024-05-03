@@ -1,6 +1,6 @@
-# fl_upnp
+# upnped
 
-fl_upnp is a Flutter library for discovering and controlling UPnP devices.
+upnped is a Dart library for discovering and controlling UPnP devices.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -9,14 +9,14 @@ fl_upnp is a Flutter library for discovering and controlling UPnP devices.
 Install from pub with:
 
 ```bash
-flutter pub add fl_upnp
+flutter pub add upnped
 ```
 
-or by adding fl_upnp as a dependency in `pubspec.yaml`:
+or by adding upnped as a dependency in `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  fl_upnp: <latest_version>
+  upnped: <latest_version>
 ```
 
 ## Usage
@@ -24,46 +24,35 @@ dependencies:
 ### Discover devices
 
 ```dart
-import 'package:fl_upnp/fl_upnp.dart' as upnp;
+final server = Server.getInstance();
 
-Future<void> main() async {
-    final server = upnp.Server();
-    final sub = server.devices.listen((device) => print('Found a device'));
+server.devices.listen((UPnPDevice event) {
+    print('Discovered a device: ${event}');
+});
 
-    await server.initialize();
-    await server.search();
-}
+await server.listen(Options{
+    locale: 'en',
+});
+await server.search();
 ```
 
-### Control devices
+### Invoke actions
 
-This snippet assumes that the `_findMyDevice()` function uses the code from [discover](Discover) to find a device.
+Invoke actions on discovered devices.
 
 ```dart
-import 'package:fl_upnp/fl_upnp.dart';
+final control = ControlPoint.getInstance();
+UPnPDevice device = getDevice();
+ServiceAction action = selectAction(device);
+Map<String, dynamic> actionArgs = collectArgs();
 
-Future<void> main() async {
-    final control = ControlPoint();
-    final requestBuilder = ActionRequestBuilder();
-
-    final device = await _findMyDevice();
-
-    final request = await requestBuilder.build(device.service, 'helloWorld', {
-        'name': 'Leonardo'
-    });
-    final response = control.invoke(request);
-}
-
-Future<UPnPDevice> _findMyDevice() {
-    // ...
-}
-
+action.invoke(control, actionArgs);us
 ```
 
-### Misc
+### Network Events
 
-This library also provides a stream that emits all network activity for UPnP devices:
+This package emits all UPnP network events sent and received.
 
 ```dart
-upnp.network.listen((message) => print(message));
+UPnPObserver.networkEvents.listen(print);
 ```

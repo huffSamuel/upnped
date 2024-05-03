@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "fl_upnp",
+            "name": "upnped",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "fl_upnp (profile mode)",
+            "name": "upnped (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "fl_upnp (release mode)",
+            "name": "upnped (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

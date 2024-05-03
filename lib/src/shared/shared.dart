@@ -2,13 +2,14 @@ library shared;
 
 import 'dart:async';
 import 'dart:io';
+import 'package:upnped/src/shared/windows_version_strategy.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:fl_upnp/src/defaults.dart';
-import 'package:fl_upnp/src/shared/ios_version_strategy.dart';
-import 'package:fl_upnp/src/shared/macos_version_strategy.dart';
+import 'package:upnped/src/defaults.dart';
+import 'package:upnped/src/shared/ios_version_strategy.dart';
+import 'package:upnped/src/shared/macos_version_strategy.dart';
 import 'package:xml/xml.dart';
 
 import 'android_version_strategy.dart';
@@ -22,7 +23,8 @@ final networkController = StreamController<NetworkEvent>.broadcast();
 void log(String level, String message, [Map<String, dynamic>? properties]) {
   if (kDebugMode) {
     print(
-        '[${level.toUpperCase()}] - ${DateTime.now().toIso8601String()}: $message $properties');
+      '[${level.toUpperCase()}] - ${DateTime.now().toIso8601String()}: $message $properties',
+    );
   }
 }
 

@@ -22,7 +22,7 @@ class PlatformUserAgentFactory implements UserAgentFactory {
       final s = _pickStrategy();
       final os = await s.create(di);
 
-      _userAgent = '$os UPnP/1.1 fl_upnp/$packageVersion';
+      _userAgent = '$os UPnP/1.1 upnped/$packageVersion';
     }
 
     return _userAgent!;
@@ -36,7 +36,11 @@ OSVersionStrategy _pickStrategy() {
     return IOSVersionStrategy();
   } else if (Platform.isMacOS) {
     return MacOSVersionStrategy();
+  } else if (Platform.isWindows) {
+    return WindowsVersionStrategy();
   }
 
-  throw UnimplementedError('Host OS not supported: ${Platform.operatingSystem}');
+  throw UnimplementedError(
+    'Host OS not supported: ${Platform.operatingSystem}',
+  );
 }

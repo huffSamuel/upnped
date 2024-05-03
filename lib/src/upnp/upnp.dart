@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:fl_upnp/src/defaults.dart';
+import 'package:upnped/src/defaults.dart';
 import 'package:xml/xml.dart';
 
 import '../shared/shared.dart';

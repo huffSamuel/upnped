@@ -5,7 +5,7 @@ class Server {
   static Server? _instance;
 
   static Server _createInstance() {
-    log('info', 'fl_upnp starting.... logging is disabled in non-debug modes');
+    log('info', 'upnped starting.... logging is disabled in non-debug modes');
     return Server._(
       ssdpServer: ssdp.Server(
         socketBuilder: const ssdp.SocketBuilder(
