@@ -7,16 +7,22 @@ permissions:
   contents: write
   pull-requests: write
 
-name: release-please
+name: main
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub get
+      - run: dart format --output=none --set-exit-if-changed .
+      - run: dart analyze
+      - run: dart test
+      - uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.codecov_token }}
       - uses: google-github-actions/release-please-action@v4
         with:
           token: ${{ secrets.release_please_token }}
           release-type: dart
-      - uses: codecov/codecov-action@v4.0.1
-        with:
-          token: ${{ secrets.codecov_token }}
