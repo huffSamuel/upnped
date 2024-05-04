@@ -25,8 +25,20 @@ class ControlPoint {
         _builder = builder,
         _userAgentFactory = userAgentFactory;
 
+  @visibleForTesting
+  factory ControlPoint.forTest(
+    http.Client client,
+    ActionRequestBuilder requestBuilder,
+    UserAgentFactory userAgentFactory,
+  ) =>
+      ControlPoint._(
+        client: client,
+        builder: requestBuilder,
+        userAgentFactory: userAgentFactory,
+      );
+
   /// Invoke an action.
-  /// 
+  ///
   /// Prefer calling `invoke()` on the ServiceAction object over calling this method.
   Future<ActionResponse> invoke(
     ActionRequestParams params,

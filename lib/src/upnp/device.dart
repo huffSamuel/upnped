@@ -388,15 +388,16 @@ class ServiceAction {
 
   late Service _service;
 
-  Future<control.ActionResponse> invoke(control.ControlPoint controlPoint, Map<String, dynamic> args) async {
-    return await controlPoint.invoke(control.ActionRequestParams(
-      actionName: name,
-      serviceType: _service._aggregate.document.serviceType,
-      serviceVersion: _service._aggregate.document.serviceVersion,
-      uri: _service._aggregate.location,
-      controlPath: _service._aggregate.document.controlUrl.path,
-      arguments: args,
-    ));
+  Future<control.ActionResponse> invoke(
+    control.ControlPoint controlPoint,
+    Map<String, dynamic> args,
+  ) async {
+    final params = control.ActionRequestParams.fromService(
+      _service._aggregate,
+      name,
+      args,
+    );
+    return await controlPoint.invoke(params);
   }
 
   ServiceAction({

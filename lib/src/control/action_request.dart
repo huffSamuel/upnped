@@ -16,7 +16,6 @@ class ActionRequest with EquatableMixin {
 }
 
 class ActionRequestParams {
-  
   /// The name of the action to invoke.
   final String actionName;
 
@@ -25,7 +24,7 @@ class ActionRequestParams {
 
   /// The version of the parent service.
   final String serviceVersion;
-  
+
   /// The uri for controlling the parent service.
   final Uri uri;
 

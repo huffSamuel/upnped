@@ -2,7 +2,6 @@
 import 'package:upnped/upnped.dart';
 
 Future<void> main() async {
-  
   final server = Server.getInstance();
   final control = ControlPoint.getInstance();
 
@@ -16,8 +15,7 @@ Future<void> main() async {
   await server.listen(Options(
     locale: 'en',
   ));
-  
+
   await server.search();
   await server.stop();
-
 }
