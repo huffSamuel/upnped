@@ -38,8 +38,6 @@ await server.search();
 
 ### Invoke actions
 
-Invoke actions on discovered devices.
-
 ```dart
 final control = ControlPoint.getInstance();
 UPnPDevice device = getDevice();
@@ -49,9 +47,7 @@ Map<String, dynamic> actionArgs = collectArgs();
 action.invoke(control, actionArgs);us
 ```
 
-### Network Events
-
-This package emits all UPnP network events sent and received.
+### Monitor UPnP Events
 
 ```dart
 UPnPObserver.networkEvents.listen(print);

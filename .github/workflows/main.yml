@@ -17,3 +17,6 @@ jobs:
         with:
           token: ${{ secrets.release_please_token }}
           release-type: dart
+      - uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.codecov_token }}
