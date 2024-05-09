@@ -1,11 +1,14 @@
 {
     "cSpell.words": [
         "Datagram",
+        "nocache",
         "retval",
         "scpd",
         "scpdurl",
         "sprintf",
         "SSDP",
-        "upnp"
+        "upnp",
+        "upnped",
+        "useragent"
     ]
 }

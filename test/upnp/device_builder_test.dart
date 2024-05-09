@@ -14,7 +14,7 @@ import '../util.dart';
 ])
 import 'device_builder_test.mocks.dart';
 
-final notify = '''CACHE-CONTROL: max-age=1800
+const notify = '''CACHE-CONTROL: max-age=1800
 EXT: 
 LOCATION: http://192.168.0.135:64321/bar-cl3-ms.xml
 SERVER: Linux/3.10 UPnP/1.0 Sony-BDV/2.0
@@ -25,7 +25,7 @@ X-AV-Physical-Unit-Info: pa="HT-CT790"; pl=;
 X-AV-Server-Info: av=5.0; hn=""; cn="Sony Corporation"; mn="HT-CT-790"; mv="2.0";
 ''';
 
-final rootDeviceDocument =
+const rootDeviceDocument =
     '''This XML file does not appear to have any style information associated with it. The document tree is shown below.
 <root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:av="urn:schemas-sony-com:av">
 <specVersion>
