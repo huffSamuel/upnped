@@ -42,7 +42,7 @@ void main() {
         final device = Device.parse(utf8.encode(notify));
 
         expect(device.cacheControl, equals('max-age=1800'));
-        expect(device.date, equals(DateTime(2024, 05, 08, 21, 32, 57).toUtc()));
+        expect(device.date, equals(DateTime.parse('2024-05-09T04:32:57.000Z')));
         expect(device.ext, equals(''));
         expect(
           device.location,
