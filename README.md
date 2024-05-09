@@ -1,7 +1,8 @@
 # upnped
 
-upnped is a Dart library for discovering and controlling UPnP devices.
+A Dart library for discovering and controlling UPnP devices.
 
+[![codecov](https://codecov.io/gh/huffSamuel/upnped/graph/badge.svg?token=VAFSPLCEQV)](https://codecov.io/gh/huffSamuel/upnped)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Installation

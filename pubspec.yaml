@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.1.0
+  platform: ^3.1.4
   sprintf: ^7.0.0
   xml: ^6.5.0
 

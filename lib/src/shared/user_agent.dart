@@ -6,41 +6,61 @@ abstract class UserAgentFactory {
 
 /// Creates a user agent string from the current platform.
 class PlatformUserAgentFactory implements UserAgentFactory {
-  final DeviceInfoPlugin? deviceInfo;
+  final LocalPlatform localPlatform;
+  final DeviceInfoPlugin deviceInfo;
 
   String? _userAgent;
 
-  PlatformUserAgentFactory({
-    this.deviceInfo,
+  @visibleForTesting
+  PlatformUserAgentFactory.forTest({
+    required this.localPlatform,
+    required this.deviceInfo,
   });
+
+  PlatformUserAgentFactory()
+      : localPlatform = const LocalPlatform(),
+        deviceInfo = DeviceInfoPlugin();
+
+  Future<(String operatingSystem, String version)> _operatingSystem() async {
+    if (localPlatform.isAndroid) {
+      final i = await deviceInfo.androidInfo;
+      return ('Android', i.version.sdkInt.toString());
+    }
+
+    if (localPlatform.isIOS) {
+      final i = await deviceInfo.iosInfo;
+      return ('iOS', i.systemVersion);
+    }
+
+    if (localPlatform.isMacOS) {
+      final i = await deviceInfo.macOsInfo;
+      return ('MacOS', '${i.majorVersion}.${i.minorVersion}');
+    }
+
+    if (localPlatform.isWindows) {
+      final i = await deviceInfo.windowsInfo;
+      return ('Windows', i.buildNumber.toString());
+    }
+
+    if (localPlatform.isLinux) {
+      final i = await deviceInfo.linuxInfo;
+      return ('Linux', i.versionId.toString());
+    }
+
+    throw UnimplementedError(
+        'Host OS not supported: ${localPlatform.operatingSystem}');
+  }
+
+  Future<String> _buildUserAgent() async {
+    final os = await _operatingSystem();
+
+    return '${os.$1}/${os.$2} UPnP/1.1 upnped/$packageVersion';
+  }
 
   @override
   Future<String> create() async {
-    if (_userAgent == null) {
-      final di = deviceInfo ?? DeviceInfoPlugin();
-
-      final s = _pickStrategy();
-      final os = await s.create(di);
-
-      _userAgent = '$os UPnP/1.1 upnped/$packageVersion';
-    }
+    _userAgent ??= await _buildUserAgent();
 
     return _userAgent!;
   }
-}
-
-OSVersionStrategy _pickStrategy() {
-  if (Platform.isAndroid) {
-    return AndroidVersionStrategy();
-  } else if (Platform.isIOS) {
-    return IOSVersionStrategy();
-  } else if (Platform.isMacOS) {
-    return MacOSVersionStrategy();
-  } else if (Platform.isWindows) {
-    return WindowsVersionStrategy();
-  }
-
-  throw UnimplementedError(
-    'Host OS not supported: ${Platform.operatingSystem}',
-  );
 }

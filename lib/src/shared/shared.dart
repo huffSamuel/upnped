@@ -1,22 +1,16 @@
 library shared;
 
 import 'dart:async';
-import 'dart:io';
-import 'package:upnped/src/shared/windows_version_strategy.dart';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:platform/platform.dart';
 import 'package:upnped/src/defaults.dart';
-import 'package:upnped/src/shared/ios_version_strategy.dart';
-import 'package:upnped/src/shared/macos_version_strategy.dart';
 import 'package:xml/xml.dart';
 
-import 'android_version_strategy.dart';
-import 'os_version_strategy.dart';
-
-part 'user_agent.dart';
 part 'network_event.dart';
+part 'user_agent.dart';
 
 final networkController = StreamController<NetworkEvent>.broadcast();
 

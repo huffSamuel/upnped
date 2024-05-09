@@ -1,8 +1,29 @@
 part of 'ssdp.dart';
 
+const _cacheControl = 'cache-control';
+const _date = 'date';
+const _ext = 'ext';
+const _location = 'location';
+const _opt = 'opt';
+const _server = 'server';
+const _st = 'st';
+const _usn = 'usn';
+
+const _knownKeys = [
+  _cacheControl,
+  _date,
+  _ext,
+  _location,
+  _opt,
+  _server,
+  _st,
+  _usn,
+];
+
 class Device with EquatableMixin {
   final String _raw;
   final Map<String, String> _parsed;
+  final UnmodifiableMapView<String, String> _extensions;
 
   /// After this duration, control points should assume the device is no longer available.
   String? get cacheControl => _parsed['cache-control'];
@@ -30,11 +51,20 @@ class Device with EquatableMixin {
   /// A unique service name for this device.
   String? get usn => _parsed['usn'];
 
-  Device._(this._raw, this._parsed);
+  UnmodifiableMapView<String, String> get extensions => _extensions;
+
+  String? extension(String key) => extensions[key.toLowerCase()];
+
+  Device._(
+    this._raw,
+    this._parsed,
+    Map<String, String> extensions,
+  ) : _extensions = UnmodifiableMapView(extensions);
 
   factory Device.parse(Uint8List data) {
     final d = utf8.decode(data);
-    Map<String, String> parsed = {};
+    Map<String, String> known = {};
+    Map<String, String> extensions = {};
 
     for (var segment in d.split('\r\n')) {
       final colon = segment.indexOf(':');
@@ -42,11 +72,16 @@ class Device with EquatableMixin {
       if (colon != -1) {
         final key = segment.substring(0, colon).trim().toLowerCase();
         final value = segment.substring(colon + 1).trim();
-        parsed.putIfAbsent(key, () => value);
+
+        if (_knownKeys.contains(key)) {
+          known.putIfAbsent(key, () => value);
+        } else {
+          extensions.putIfAbsent(key, () => value);
+        }
       }
     }
 
-    return Device._(d, parsed);
+    return Device._(d, known, extensions);
   }
 
   @override

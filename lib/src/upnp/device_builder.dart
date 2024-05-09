@@ -1,10 +1,17 @@
 part of 'upnp.dart';
 
 class DeviceBuilder {
-  const DeviceBuilder();
+  final http.Client _client;
+
+  DeviceBuilder() : _client = http.Client();
+
+  @visibleForTesting
+  DeviceBuilder.forTest({
+    required http.Client client,
+  }) : _client = client;
 
   Future<http.Response> _get(Uri url, {Map<String, String>? headers}) async {
-    final response = await http.get(url, headers: headers);
+    final response = await _client.get(url, headers: headers);
     networkController.add(HttpEvent(response));
     return response;
   }

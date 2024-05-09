@@ -31,12 +31,13 @@ abstract class NetworkEvent {
 class MSearchEvent extends NetworkEvent {
   final String content;
 
-  MSearchEvent(this.content)
-      : super(
-          direction: NetworkEventDirection.outgoing,
+  MSearchEvent(
+    this.content, {
+    super.direction = NetworkEventDirection.outgoing,
+    super.from = '127.0.0.1',
+  }) : super(
           protocol: NetworkEventProtocol.ssdp,
           messageType: 'M-SEARCH',
-          from: '127.0.0.1',
         );
 
   @override

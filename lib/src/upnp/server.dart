@@ -7,13 +7,8 @@ class Server {
   static Server _createInstance() {
     log('info', 'upnped starting.... logging is disabled in non-debug modes');
     return Server._(
-      ssdpServer: ssdp.Server(
-        socketBuilder: const ssdp.SocketBuilder(
-          socketFactory: ssdp.RawDatagramSocketFactory(),
-        ),
-        userAgentFactory: shared.PlatformUserAgentFactory(),
-      ),
-      deviceBuilder: const DeviceBuilder(),
+      ssdpServer: ssdp.Server(),
+      deviceBuilder: DeviceBuilder(),
     );
   }
 

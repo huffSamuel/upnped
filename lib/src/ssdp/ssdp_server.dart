@@ -11,22 +11,42 @@ InternetAddress _group(InternetAddressType addressType) {
       : _v6Multicast;
 }
 
+typedef ListNetworkFn = Future<List<NetworkInterface>> Function();
+
+sealed class NetworkInterfaceLister {
+  Future<List<NetworkInterface>> list();
+}
+
+class NativeNetworkInterfaceLister implements NetworkInterfaceLister {
+  @override
+  Future<List<NetworkInterface>> list() => NetworkInterface.list();
+}
+
 class Server {
   final _discoveredController = StreamController<Device>.broadcast();
   final List<SocketProxy> _sockets = [];
   final SocketBuilder _socketBuilder;
   final UserAgentFactory _userAgentFactory;
+  final NetworkInterfaceLister _networkLister;
 
   late List<NetworkInterface> _interfaces;
 
   /// A stream that emits whenever a new device is discovered.
   Stream<Device> get discovered => _discoveredController.stream;
 
-  Server({
+  Server()
+      : _socketBuilder = const SocketBuilder(),
+        _userAgentFactory = PlatformUserAgentFactory(),
+        _networkLister = NativeNetworkInterfaceLister();
+
+  @visibleForTesting
+  Server.forTest({
     required SocketBuilder socketBuilder,
     required UserAgentFactory userAgentFactory,
-  })  : _socketBuilder = socketBuilder,
-        _userAgentFactory = userAgentFactory;
+    required NetworkInterfaceLister networkLister,
+  })  : _userAgentFactory = userAgentFactory,
+        _socketBuilder = socketBuilder,
+        _networkLister = networkLister;
 
   /// Stop listening for device discovery notifications.
   Future<void> stop() async {
@@ -44,7 +64,7 @@ class Server {
       throw StateError('cannot start while running');
     }
 
-    _interfaces = await NetworkInterface.list();
+    _interfaces = await _networkLister.list();
 
     _sockets.addAll(await Future.wait([
       _socketBuilder.build(
@@ -79,10 +99,14 @@ class Server {
   }
 
   /// Search for devices.
-  void search({
+  Future<void> search({
     Duration maxResponseTime = const Duration(seconds: defaultResponseSeconds),
     String searchTarget = defaultSearchTarget,
   }) async {
+    if (_sockets.isEmpty) {
+      throw StateError('Cannot search without starting');
+    }
+
     final userAgent = await _userAgentFactory.create();
 
     final request = MSearchRequest.multicast(
