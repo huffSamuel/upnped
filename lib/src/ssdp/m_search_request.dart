@@ -32,8 +32,7 @@ class MSearchRequest {
   ///
   /// {mx} is the max wait time in seconds. Defaults to 5. Must be greater than 0.
   ///
-  /// {userAgent} is the current user agent. This value should be obtained from the
-  /// {UserAgentFactory}.
+  /// {userAgent} is the current user agent.
   factory MSearchRequest.multicast(
     String userAgent, {
     String st = defaultSearchTarget,

@@ -54,7 +54,7 @@ class PlatformUserAgentFactory implements UserAgentFactory {
   Future<String> _buildUserAgent() async {
     final os = await _operatingSystem();
 
-    return '${os.$1}/${os.$2} UPnP/1.1 upnped/$packageVersion';
+    return '${os.$1}/${os.$2} UPnP/2.0 upnped/$packageVersion';
   }
 
   @override

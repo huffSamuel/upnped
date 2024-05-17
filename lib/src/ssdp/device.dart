@@ -28,7 +28,7 @@ class Device with EquatableMixin {
   /// After this duration, control points should assume the device is no longer available.
   String? get cacheControl => _parsed['cache-control'];
 
-  /// The RFC1123-date date when this response was generated.
+  /// The RFC1123-date when this response was generated.
   DateTime? get date =>
       _parsed['date'] == null ? null : HttpDate.parse(_parsed['date']!);
 
@@ -39,7 +39,6 @@ class Device with EquatableMixin {
   Uri? get location =>
       _parsed['location'] == null ? null : Uri.parse(_parsed['location']!);
 
-  ///
   String? get opt => _parsed['opt'];
 
   /// Specified by the UPnP vendor, this specifies product tokens for the device.
@@ -51,8 +50,12 @@ class Device with EquatableMixin {
   /// A unique service name for this device.
   String? get usn => _parsed['usn'];
 
+  /// Map of extensions defined for this device.
   UnmodifiableMapView<String, String> get extensions => _extensions;
 
+  /// Get a single extension value for the device.
+  /// 
+  /// Returns `null` if the extension is not defined for this device.
   String? extension(String key) => extensions[key.toLowerCase()];
 
   Device._(
