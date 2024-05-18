@@ -2,7 +2,7 @@ part of 'upnp.dart';
 
 class UPnPDevice extends DeviceAggregate {
   /// Device that replied to the SSDP query.
-  final ssdp.Device client;
+  final ssdp.Notify client;
 
   UPnPDevice(
     this.client,

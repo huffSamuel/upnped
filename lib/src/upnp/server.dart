@@ -31,7 +31,7 @@ class Server {
   /// network requests to retrieve the Device and Service documents. This helps
   /// eliminate noisy network traffic for devices that do not properly respect
   /// the `searchTarget` parameter of a M-SEARCH request.
-  bool Function(ssdp.Device event) loadPredicate = (_) => true;
+  bool Function(ssdp.Notify event) loadPredicate = (_) => true;
 
   /// A broadcast stream of UPnP devices discovered.
   Stream<UPnPDevice> get devices => _devices;

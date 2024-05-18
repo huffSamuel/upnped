@@ -674,7 +674,7 @@ class MockRequest extends _i1.Mock implements _i2.Request {
 /// A class which mocks [Device].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDevice extends _i1.Mock implements _i7.Device {
+class MockDevice extends _i1.Mock implements _i7.Notify {
   @override
   List<Object?> get props => (super.noSuchMethod(
         Invocation.getter(#props),

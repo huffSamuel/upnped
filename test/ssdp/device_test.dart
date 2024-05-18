@@ -10,7 +10,7 @@ void main() {
   group('device', () {
     group('toString', () {
       test('should return expected string', () {
-        final device = Device.parse(utf8.encode(notify));
+        final device = Notify.parse(utf8.encode(notify));
 
         expect(device.toString(), equals(notify));
       });
@@ -23,7 +23,7 @@ void main() {
           'x-av-server-info':
               'av=5.0; hn=""; cn="Sony Corporation"; mn="HT-CT-790"; mv="2.0";',
         };
-        final device = Device.parse(utf8.encode(notify));
+        final device = Notify.parse(utf8.encode(notify));
 
         expect(device.extensions, equals(expected));
       });
@@ -31,7 +31,7 @@ void main() {
 
     group('props', () {
       test('should return the expected properties', () {
-        final device = Device.parse(utf8.encode(notify));
+        final device = Notify.parse(utf8.encode(notify));
 
         expect(device.props, equals([notify]));
       });
@@ -39,7 +39,7 @@ void main() {
 
     group('parse', () {
       test('should set the expected properties', () {
-        final device = Device.parse(utf8.encode(notify));
+        final device = Notify.parse(utf8.encode(notify));
 
         expect(device.cacheControl, equals('max-age=1800'));
         expect(device.date, equals(DateTime.parse('2024-05-09T04:32:57.000Z')));

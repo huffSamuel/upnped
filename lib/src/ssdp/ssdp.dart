@@ -13,8 +13,8 @@ import 'package:sprintf/sprintf.dart';
 import '../defaults.dart';
 
 part 'socket_proxy.dart';
-part 'device.dart';
-part 'm_search_request.dart';
+part 'messages/notify.dart';
+part 'messages/m_search.dart';
 part 'search_target.dart';
 part 'ssdp_server.dart';
 part 'socket_builder.dart';

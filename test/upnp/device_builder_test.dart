@@ -10,7 +10,7 @@ import '../util.dart';
   MockSpec<http.Client>(),
   MockSpec<http.Response>(),
   MockSpec<http.Request>(),
-  MockSpec<Device>(),
+  MockSpec<Notify>(),
 ])
 import 'device_builder_test.mocks.dart';
 

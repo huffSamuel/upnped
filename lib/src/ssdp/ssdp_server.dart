@@ -23,7 +23,7 @@ class NativeNetworkInterfaceLister implements NetworkInterfaceLister {
 }
 
 class Server {
-  final _discoveredController = StreamController<Device>.broadcast();
+  final _discoveredController = StreamController<Notify>.broadcast();
   final List<SocketProxy> _sockets = [];
   final SocketBuilder _socketBuilder;
   final UserAgentFactory _userAgentFactory;
@@ -32,7 +32,7 @@ class Server {
   late List<NetworkInterface> _interfaces;
 
   /// A stream that emits whenever a new device is discovered.
-  Stream<Device> get discovered => _discoveredController.stream;
+  Stream<Notify> get discovered => _discoveredController.stream;
 
   Server()
       : _socketBuilder = const SocketBuilder(),
@@ -109,7 +109,7 @@ class Server {
 
     final userAgent = await _userAgentFactory.create();
 
-    final request = MSearchRequest.multicast(
+    final request = MSearch.multicast(
       userAgent,
       mx: maxResponseTime.inSeconds,
       st: searchTarget,
@@ -139,7 +139,11 @@ class Server {
     }
 
     try {
-      final device = Device.parse(packet.data);
+      // TODO: Determine if this is a notify in response to a search, 
+      // some other type of notify,
+      // or an external MSEARCH
+      final notify = NotifyMessage.parse(packet.data);
+      final device = Notify(notify);
       networkController.add(NotifyEvent(device.location!, device.toString()));
       _discoveredController.add(device);
     } catch (err) {

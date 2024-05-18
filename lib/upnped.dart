@@ -7,7 +7,7 @@ export 'src/control/control.dart'
         ActionRequestParams,
         ControlPoint,
         ActionResponse;
-export 'src/ssdp/ssdp.dart' show Device, SearchTarget;
+export 'src/ssdp/ssdp.dart' show Notify, SearchTarget;
 export 'src/shared/shared.dart'
     show
         UPnPObserver,

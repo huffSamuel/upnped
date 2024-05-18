@@ -21,7 +21,7 @@ class DeviceBuilder {
   /// This method retrieves all device and service documents for the given client and constructs
   /// an aggregate device from the retrieved information.
   Future<UPnPDevice> build(
-    ssdp.Device client,
+    ssdp.Notify client,
     String locale,
   ) async {
     final headers = {HttpHeaders.acceptLanguageHeader: locale};
@@ -50,7 +50,7 @@ class DeviceBuilder {
   }
 
   Future<ServiceAggregate> _getService(
-    ssdp.Device client,
+    ssdp.Notify client,
     Map<String, String> headers,
     ServiceDocument document,
   ) async {
@@ -83,7 +83,7 @@ class DeviceBuilder {
   }
 
   Future<DeviceAggregate> _getDevice(
-    ssdp.Device client,
+    ssdp.Notify client,
     DeviceDocument device,
     Map<String, String> headers,
   ) async {
