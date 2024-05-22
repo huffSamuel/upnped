@@ -13,7 +13,7 @@ void main() {
       setUp(() {});
 
       test('should create an ActionRequest', () async {
-        final params = ActionRequestParams(
+        final params = ActionParams(
           actionName: 'action',
           serviceType: 'type',
           serviceVersion: '1',
@@ -28,7 +28,7 @@ void main() {
       });
 
       test('should return the expected ActionRequest', () async {
-        final params = ActionRequestParams(
+        final params = ActionParams(
           actionName: 'action',
           serviceType: 'type',
           serviceVersion: 'version',

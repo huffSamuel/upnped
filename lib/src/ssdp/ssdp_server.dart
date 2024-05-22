@@ -5,7 +5,7 @@ final InternetAddress _v6Multicast = InternetAddress('FF05::C');
 const _ssdpPort = 1900;
 const _anyPort = 0;
 
-InternetAddress _group(InternetAddressType addressType) {
+InternetAddress _multicastAddress(InternetAddressType addressType) {
   return addressType == InternetAddress.anyIPv4.type
       ? _v4Multicast
       : _v6Multicast;
@@ -23,7 +23,7 @@ class NativeNetworkInterfaceLister implements NetworkInterfaceLister {
 }
 
 class Server {
-  final _discoveredController = StreamController<Notify>.broadcast();
+  final _discoveredController = StreamController<Notify>();
   final List<SocketProxy> _sockets = [];
   final SocketBuilder _socketBuilder;
   final UserAgentFactory _userAgentFactory;
@@ -66,36 +66,24 @@ class Server {
 
     _interfaces = await _networkLister.list();
 
-    _sockets.addAll(await Future.wait([
-      _socketBuilder.build(
-        InternetAddress.anyIPv4,
-        _interfaces,
-        _ssdpPort,
-        _onSocketEvent,
-        multicastHops: multicastHops,
+    _sockets.addAll(
+      await Future.wait(
+        [
+          (InternetAddress.anyIPv4, _ssdpPort),
+          (InternetAddress.anyIPv4, _anyPort),
+          (InternetAddress.anyIPv6, _ssdpPort),
+          (InternetAddress.anyIPv6, _anyPort),
+        ].map(
+          (x) => _socketBuilder.build(
+            x.$1,
+            _interfaces,
+            x.$2,
+            _onSocketEvent,
+            multicastHops: multicastHops,
+          ),
+        ),
       ),
-      _socketBuilder.build(
-        InternetAddress.anyIPv4,
-        _interfaces,
-        _anyPort,
-        _onSocketEvent,
-        multicastHops: multicastHops,
-      ),
-      _socketBuilder.build(
-        InternetAddress.anyIPv6,
-        _interfaces,
-        _ssdpPort,
-        _onSocketEvent,
-        multicastHops: multicastHops,
-      ),
-      _socketBuilder.build(
-        InternetAddress.anyIPv6,
-        _interfaces,
-        _anyPort,
-        _onSocketEvent,
-        multicastHops: multicastHops,
-      ),
-    ]));
+    );
   }
 
   /// Search for devices.
@@ -138,14 +126,23 @@ class Server {
       return;
     }
 
+    final data = utf8.decode(packet.data);
+    final lines = data.split('\r\n');
+
     try {
-      // TODO: Determine if this is a notify in response to a search, 
-      // some other type of notify,
-      // or an external MSEARCH
-      final notify = NotifyMessage.parse(packet.data);
-      final device = Notify(notify);
-      networkController.add(NotifyEvent(device.location!, device.toString()));
-      _discoveredController.add(device);
+      if (lines[0].contains(MSearch.method)) {
+        // TODO: Emit an MSEARCH network event
+        log('info', 'M-SEARCH request heard', {
+          'data': lines,
+        });
+        return;
+      }
+
+      final notify = Notify.fromData(data);
+
+      final device = NotifyDiscovered(notify);
+      networkController.add(NotifyEvent(device.location!, notify.toString()));
+      _discoveredController.add(notify);
     } catch (err) {
       log('error', 'Unable to parse packet as NOTIFY', {
         'packet': utf8.decode(packet.data),

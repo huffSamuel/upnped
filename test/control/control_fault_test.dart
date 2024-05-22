@@ -8,10 +8,10 @@ void main() {
   group('ControlFault', () {
     group('parse()', () {
       test('parses faults', () {
-        const expected = ActionFault('404', 'an error');
+        const expected = Fault('404', 'an error');
 
         const input = faultResponse;
-        final actual = ActionFault.parse(input);
+        final actual = Fault.parse(input);
 
         expect(actual, equals(expected));
       });

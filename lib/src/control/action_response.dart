@@ -1,7 +1,11 @@
 part of 'control.dart';
 
+/// A response from an action invocation.
 class ActionResponse with EquatableMixin {
+  /// Name of the action that was executed.
   final String actionName;
+
+  /// Output arguments returned from this invocation.
   final Map<String, String> arguments;
 
   const ActionResponse(

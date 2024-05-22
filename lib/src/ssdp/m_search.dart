@@ -1,25 +1,25 @@
-part of '../ssdp.dart';
+part of 'ssdp.dart';
 
-const _msearchRootTemplate = '''M-SEARCH * HTTP/1.1\r
+const _unicastTemplate = '''M-SEARCH * HTTP/1.1\r
 HOST: 239.255.255.250:1900\r
 MAN: "ssdp:discover"\r
-''';
-
-const _msearchTailTemplate = '''ST: %s\r
+ST: %s\r
 USER-AGENT: %s \r
 \r
 ''';
 
-const _unicastTemplate = '''${_msearchRootTemplate}
-$_msearchTailTemplate
-''';
-
-const _multicastTemplate = '''${_msearchRootTemplate}
+const _multicastTemplate = '''M-SEARCH * HTTP/1.1\r
+HOST: 239.255.255.250:1900\r
+MAN: "ssdp:discover"\r
 MX: %s\r
-$_msearchTailTemplate
+ST: %s\r
+USER-AGENT: %s \r
+\r
 ''';
 
 class MSearch {
+  static String method = 'M-SEARCH';
+
   final String message;
 
   const MSearch._({

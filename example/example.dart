@@ -3,13 +3,14 @@ import 'package:upnped/upnped.dart';
 
 Future<void> main() async {
   final server = Server.getInstance();
-  final control = ControlPoint.getInstance();
 
-  server.devices.listen((UPnPDevice event) {
+  server.devices.listen((Device event) {
     print('Discovered a device');
-    print(event.document.friendlyName);
+    print(event.description.friendlyName);
 
-    event.services.first.service!.actions.first.invoke(control, {});
+    event.services.first.service!.actions.first.invoke({
+      'someArgFromList': 'foo'
+    });
   });
 
   await server.listen(Options(

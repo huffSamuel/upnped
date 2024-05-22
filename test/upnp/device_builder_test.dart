@@ -93,12 +93,12 @@ const rootDeviceDocument =
 
 void main() {
   group('build', () {
-    late DeviceBuilder builder;
+    late DeviceManager builder;
     late MockClient mockClient;
 
     setUp(() {
       mockClient = MockClient();
-      builder = DeviceBuilder.forTest(client: mockClient);
+      builder = DeviceManager.forTest(client: mockClient);
     });
 
     group('build', () {

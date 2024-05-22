@@ -4,6 +4,7 @@
         "Datagram",
         "nocache",
         "retval",
+        "rxdart",
         "scpd",
         "scpdurl",
         "sprintf",

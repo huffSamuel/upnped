@@ -50,7 +50,7 @@ class SocketBuilder {
       interfaces,
     )..listen(fn);
 
-    final group = _group(address.type);
+    final group = _multicastAddress(address.type);
 
     try {
       socket.joinMulticast(group);

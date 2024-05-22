@@ -41,7 +41,7 @@ class ControlPoint {
   ///
   /// Prefer calling `invoke()` on the ServiceAction object over calling this method.
   Future<ActionResponse> invoke(
-    ActionRequestParams params,
+    ActionParams params,
   ) async {
     final userAgent = await _userAgentFactory.create();
     final request = _builder.build(userAgent, params);
@@ -58,7 +58,7 @@ class ControlPoint {
     final xml = XmlDocument.parse(response.body);
 
     if (isFault(xml)) {
-      final fault = ActionFault.parse(response.body);
+      final fault = Fault.parse(response.body);
 
       throw ActionInvocationException(fault.description, fault.code);
     }

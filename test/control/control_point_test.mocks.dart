@@ -690,7 +690,7 @@ class MockActionRequestBuilder extends _i1.Mock
   @override
   _i4.ActionRequest build(
     String? userAgent,
-    _i4.ActionRequestParams? params,
+    _i4.ActionParams? params,
   ) =>
       (super.noSuchMethod(
         Invocation.method(

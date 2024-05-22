@@ -23,7 +23,7 @@ void main() {
     late MockActionRequestBuilder mockBuilder;
     late MockUserAgentFactory mockUserAgentFactory;
 
-    final params = ActionRequestParams(
+    final params = ActionParams(
       actionName: 'action',
       serviceType: 'test',
       serviceVersion: '1',

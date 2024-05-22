@@ -1,19 +1,7 @@
 part of 'upnp.dart';
 
-class UPnPDevice extends DeviceAggregate {
-  /// Device that replied to the SSDP query.
-  final ssdp.Notify client;
-
-  UPnPDevice(
-    this.client,
-    super.document,
-    super.services,
-    super.devices,
-  );
-}
-
 class ServiceAggregate {
-  final ServiceDocument document;
+  final ServiceDescription document;
   final Service? service;
   final Uri location;
 
@@ -26,14 +14,74 @@ class ServiceAggregate {
   }
 }
 
-class DeviceAggregate {
-  final DeviceDocument document;
-  final List<ServiceAggregate> services;
-  final List<DeviceAggregate> devices;
+/// A UPnP device.
+abstract class Device {
+  final _activeController = BehaviorSubject<bool>()..add(true);
 
-  DeviceAggregate(this.document, this.services, this.devices);
+  Stream<bool> get isActive => _activeController.stream;
+
+  /// Notify that replied to the SSDP query.
+  final NotifyDiscovered? notify;
+
+  final DeviceDocument description;
+  final List<ServiceAggregate> services;
+  final List<Device> devices;
+
+  Device(
+    this.description,
+    this.services,
+    this.devices, {
+    this.notify,
+  });
 }
 
+/// Internal implementation of a device to hide the status methods.
+class _DeviceImpl extends Device {
+  Timer? _timer;
+
+  void byebye() {
+    _timer?.cancel();
+    _timer = null;
+    _activeController.add(false);
+    log('info', 'Timer elapsed', {
+      'device': description.friendlyName,
+    });
+  }
+
+  void alive(NotifyAlive alive) {
+    _activeController.add(true);
+    _createTimer(alive.cacheControl);
+  }
+
+  void _createTimer(String? cacheControl) {
+    if (_timer != null) {
+      _timer!.cancel();
+      _timer = null;
+    }
+
+    final duration = parseMaxAge(cacheControl);
+    if (duration != null) {
+      log('info', 'Refreshing timer', {
+        'duration': duration,
+        'device': description.friendlyName,
+      });
+      _timer = Timer(duration, byebye);
+    }
+  }
+
+  _DeviceImpl(
+    super.description,
+    super.services,
+    super.devices, {
+    NotifyDiscovered? notify,
+  }) : super(notify: notify) {
+    if (notify != null) {
+      _createTimer(notify.cacheControl);
+    }
+  }
+}
+
+/// The architecture on which the UPnP device or service was implemented.
 class SpecVersion {
   final int major;
   final int minor;
@@ -51,38 +99,9 @@ class SpecVersion {
   }
 }
 
-class RootDocument {
-  final XmlDocument xml;
-  final String namespace;
-  final DeviceDocument device;
-  final SpecVersion specVersion;
-
-  RootDocument(
-    this.xml, {
-    required this.namespace,
-    required this.device,
-    required this.specVersion,
-  });
-
-  @override
-  toString() {
-    return xml.toString();
-  }
-
-  factory RootDocument.fromXml(XmlDocument xml) {
-    return RootDocument(
-      xml,
-      namespace: xml.rootElement.attributes
-          .where((x) => x.qualifiedName == 'xmlns')
-          .single
-          .value,
-      device: DeviceDocument.fromXml(xml.rootElement.getElement('device')!),
-      specVersion:
-          SpecVersion.fromXml(xml.rootElement.getElement('specVersion')!),
-    );
-  }
-}
-
+/// A collection of vendor-specific information, definitions of all embedded
+/// devices, URL for presentation of the device, and listings for all services,
+/// including URLs for control and eventing
 class DeviceDocument {
   /// UPnP device type.
   final DeviceType deviceType;
@@ -125,7 +144,7 @@ class DeviceDocument {
   final List<DeviceIcon> iconList;
 
   /// List of services available on this device.
-  final List<ServiceDocument> services;
+  final List<ServiceDescription> services;
 
   /// List of child devices on this device.
   final List<DeviceDocument> devices;
@@ -178,7 +197,7 @@ class DeviceDocument {
       services: _nodeMapper(
         xml.getElement('serviceList'),
         'service',
-        ServiceDocument.fromXml,
+        ServiceDescription.fromXml,
       ),
       devices: _nodeMapper(
         xml.getElement('deviceList'),
@@ -191,6 +210,7 @@ class DeviceDocument {
   }
 }
 
+/// UPnP device type.
 class DeviceType {
   final String uri;
 
@@ -205,7 +225,9 @@ class DeviceType {
   });
 }
 
-class ServiceDocument {
+/// Defines actions and their arguments, and state variables and their data
+/// type, range, and event characteristics
+class ServiceDescription {
   /// UPnP service type.
   final String serviceType;
 
@@ -223,7 +245,7 @@ class ServiceDocument {
   /// URL for eventing.
   final Uri eventSubUrl;
 
-  ServiceDocument({
+  ServiceDescription({
     required this.serviceType,
     required this.serviceVersion,
     required this.serviceId,
@@ -232,7 +254,7 @@ class ServiceDocument {
     required this.eventSubUrl,
   });
 
-  factory ServiceDocument.fromXml(XmlNode xml) {
+  factory ServiceDescription.fromXml(XmlNode xml) {
     final scpdurl = xml.getElement('SCPDURL')?.innerText;
     final controlUrl = xml.getElement('controlURL')?.innerText;
     final eventSubUrl = xml.getElement('eventSubURL')?.innerText;
@@ -240,7 +262,7 @@ class ServiceDocument {
 
     final serviceTypeFields = serviceType.split(':');
 
-    return ServiceDocument(
+    return ServiceDescription(
       serviceType: serviceTypeFields[serviceTypeFields.length - 2],
       serviceVersion: serviceTypeFields[serviceTypeFields.length - 1],
       serviceId: ServiceId.parse(xml.getElement('serviceId')!.innerText),
@@ -278,6 +300,7 @@ class ServiceId {
   }
 }
 
+/// Icon to depict device in a control point UI.
 class DeviceIcon {
   /// Icon's MIME type.
   final String mimeType;
@@ -319,7 +342,7 @@ class Service {
   final XmlDocument xml;
   final String namespace;
   final SpecVersion specVersion;
-  final List<ServiceAction> actions;
+  final List<Action> actions;
   final ServiceStateTable serviceStateTable;
 
   late ServiceAggregate _aggregate;
@@ -346,10 +369,10 @@ class Service {
       specVersion: SpecVersion.fromXml(
         root.getElement('specVersion')!,
       ),
-      actions: _nodeMapper<ServiceAction>(
+      actions: _nodeMapper<Action>(
         root.getElement('actionList'),
         'action',
-        (x) => ServiceAction.fromXml(x),
+        (x) => Action.fromXml(x),
       ),
       serviceStateTable: ServiceStateTable.fromXml(
         root.getElement('serviceStateTable')!,
@@ -364,6 +387,7 @@ class Service {
   }
 }
 
+/// The state of a service.
 class ServiceStateTable {
   /// A list of state variables.
   final List<StateVariable> stateVariables;
@@ -382,33 +406,36 @@ class ServiceStateTable {
   }
 }
 
-class ServiceAction {
+/// An action that can be invoked on a UPnP device.
+class Action {
+  /// Name of the action.
   final String name;
+
+  /// Contains arguments required for this action.
   final List<Argument>? arguments;
 
   late Service _service;
 
   Future<control.ActionResponse> invoke(
-    control.ControlPoint controlPoint,
     Map<String, dynamic> args,
   ) async {
-    final params = control.ActionRequestParams.fromService(
+    final params = control.ActionParams.fromService(
       _service._aggregate,
       name,
       args,
     );
-    return await controlPoint.invoke(params);
+    return await ControlPoint.getInstance().invoke(params);
   }
 
-  ServiceAction({
+  Action({
     required this.name,
     this.arguments,
   });
 
-  factory ServiceAction.fromXml(
+  factory Action.fromXml(
     XmlNode xml,
   ) {
-    return ServiceAction(
+    return Action(
       name: xml.getElement('name')!.innerText,
       arguments: _nodeMapper(
         xml.getElement('argumentList'),
@@ -433,8 +460,8 @@ class DataType {
   factory DataType.fromXml(XmlNode xml) {
     DataTypeValue type;
 
-    if (dataTypeMap.keys.contains(xml.innerText)) {
-      type = dataTypeMap[xml.innerText]!;
+    if (_dataTypeMap.keys.contains(xml.innerText)) {
+      type = _dataTypeMap[xml.innerText]!;
     } else {
       type = DataTypeValue.string;
     }
@@ -470,10 +497,41 @@ String? _defaultValue(DataTypeValue type) {
   }
 }
 
+enum ArgumentDirection {
+  input("in"),
+  output("out");
+
+  const ArgumentDirection(this.value);
+
+  factory ArgumentDirection.fromString(String value) {
+    for (final v in ArgumentDirection.values) {
+      if (v.value == value) {
+        return v;
+      }
+    }
+
+    throw 'Unknown argument direction';
+  }
+
+  final String value;
+}
+
+/// A parameter provided to or returned from a [Action] during invocation.
 class Argument {
+  /// Name of formal parameter.
   final String name;
-  final String direction;
+
+  /// Defines if this argument is input or output.
+  final ArgumentDirection direction;
+
+  /// Identifies at most one argument as a return value.
   final String? retval;
+
+  /// The name of a state variable defined in the same service description that
+  /// defines the data type of this argument.
+  ///
+  /// There is not necessarily any semantic relationship between this argument
+  /// and the related state variable.
   final String relatedStateVariable;
 
   Argument({
@@ -486,18 +544,20 @@ class Argument {
   factory Argument.fromXml(XmlNode xml) {
     return Argument(
       name: xml.getElement('name')!.innerText,
-      direction: xml.getElement('direction')!.innerText,
+      direction:
+          ArgumentDirection.fromString(xml.getElement('direction')!.innerText),
       retval: xml.getElement('retval')?.innerText,
       relatedStateVariable: xml.getElement('relatedStateVariable')!.innerText,
     );
   }
 }
 
+/// A variable that represents a value in the service's state.
 class StateVariable {
   /// If event messages are generated when the value of this variable changes.
   final bool? sendEvents;
 
-  /// Device if event messages will be delivered using multicast eventing.
+  /// Defines if event messages will be delivered using multicast eventing.
   final bool? multicast;
 
   /// Name of the state variable.
@@ -548,13 +608,13 @@ class StateVariable {
   }
 }
 
-Map<String, DataTypeValue> dataTypeMap = {
+Map<String, DataTypeValue> _dataTypeMap = {
   for (var v in DataTypeValue.values) v.name: v,
-  ...{'fixed.14.4': DataTypeValue.fixed14_4},
-  ...{'dateTime.tz': DataTypeValue.dateTimeTz},
-  ...{'time.tz': DataTypeValue.timeTz},
-  ...{'bin.base64': DataTypeValue.binaryBase64},
-  ...{'bin.hex': DataTypeValue.binaryHex},
+  'fixed.14.4': DataTypeValue.fixed14_4,
+  'dateTime.tz': DataTypeValue.dateTimeTz,
+  'time.tz': DataTypeValue.timeTz,
+  'bin.base64': DataTypeValue.binaryBase64,
+  'bin.hex': DataTypeValue.binaryHex,
 };
 
 enum DataTypeValue {
@@ -656,6 +716,7 @@ enum DataTypeValue {
   uuid
 }
 
+/// Defines bounds for legal numeric values.
 class AllowedValueRange {
   /// Inclusive lower bound.
   final String minimum;
@@ -666,7 +727,7 @@ class AllowedValueRange {
   /// Defines the set of allowed values permitted for the state variable between
   /// {minimum} and {maximum}.
   ///
-  /// `{maximum} = {minimum} value + n * {step}.
+  /// `{maximum} = {minimum} + n * {step}`.
   final int step;
 
   AllowedValueRange({

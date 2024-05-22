@@ -8,7 +8,7 @@ class Server {
     log('info', 'upnped starting.... logging is disabled in non-debug modes');
     return Server._(
       ssdpServer: ssdp.Server(),
-      deviceBuilder: DeviceBuilder(),
+      deviceBuilder: DeviceManager(),
     );
   }
 
@@ -18,12 +18,12 @@ class Server {
   }
 
   final ssdp.Server _ssdp;
-  final DeviceBuilder _deviceBuilder;
+  final DeviceManager _deviceBuilder;
   late Options options;
 
   bool _listening = false;
 
-  late Stream<UPnPDevice> _devices;
+  late Stream<Device> _devices;
 
   /// Filters the load process for devices.
   ///
@@ -31,22 +31,40 @@ class Server {
   /// network requests to retrieve the Device and Service documents. This helps
   /// eliminate noisy network traffic for devices that do not properly respect
   /// the `searchTarget` parameter of a M-SEARCH request.
-  bool Function(ssdp.Notify event) loadPredicate = (_) => true;
+  bool Function(NotifyDiscovered event) loadPredicate = (_) => true;
 
   /// A broadcast stream of UPnP devices discovered.
-  Stream<UPnPDevice> get devices => _devices;
+  Stream<Device> get devices => _devices;
 
   Server._({
     required ssdp.Server ssdpServer,
-    required DeviceBuilder deviceBuilder,
+    required DeviceManager deviceBuilder,
   })  : _ssdp = ssdpServer,
         _deviceBuilder = deviceBuilder {
     _devices = _ssdp.discovered
+        .doOnData(_onNotify)
+        .where((x) => x.headers[NotifyKey.nts] == null)
+        .map((x) => NotifyDiscovered(x))
         .where((e) => loadPredicate(e))
         .asyncMap((event) => _deviceBuilder.build(
               event,
               options.locale,
             ));
+  }
+
+  _onNotify(Notify event) {
+    final nts = NotificationSubtype.parse(event.headers[NotifyKey.nts]);
+
+    switch (nts) {
+      case NotificationSubtype.byebye:
+      _deviceBuilder.deactivateDevice(NotifyByeBye(event));
+        break;
+      case NotificationSubtype.alive:
+      _deviceBuilder.activateDevice(NotifyAlive(event));
+        break;
+      default:
+        // NO-OP
+    }
   }
 
   /// Stop listening for UPnP devices on the network.
@@ -75,6 +93,7 @@ class Server {
   ///
   /// If [maxResponseTime] is omitted, defaults to [defaultResponseSeconds]. [maxResponseTime] should be less
   /// than 6 seconds.
+  /// 
   /// If [searchTarget] is omitted, defaults to [defaultSearchTarget].
   ///
   /// The returned future resolves after the [maxResponseTime] has elapsed.

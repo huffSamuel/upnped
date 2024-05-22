@@ -1,15 +1,16 @@
 part of 'control.dart';
 
-class ActionFault with EquatableMixin {
+/// An error that occurred during action invocation.
+class Fault with EquatableMixin {
   final String code;
   final String description;
 
-  const ActionFault(
+  const Fault(
     this.code,
     this.description,
   );
 
-  factory ActionFault.parse(String str) {
+  factory Fault.parse(String str) {
     final xml = XmlDocument.parse(str);
     final node = xml.rootElement
         .getElement('s:Body')!
@@ -20,7 +21,7 @@ class ActionFault with EquatableMixin {
     final code = node.getElement('errorCode')!.innerText;
     final description = node.getElement('errorDescription')!.innerText;
 
-    return ActionFault(code, description);
+    return Fault(code, description);
   }
 
   @override

@@ -1,13 +1,8 @@
 library upnped;
 
-export 'src/upnp/upnp.dart';
 export 'src/control/control.dart'
-    show
-        ActionInvocationException,
-        ActionRequestParams,
-        ControlPoint,
-        ActionResponse;
-export 'src/ssdp/ssdp.dart' show Notify, SearchTarget;
+    show ActionInvocationException, ActionResponse;
+export 'src/shared/messages.dart' show NotifyDiscovered;
 export 'src/shared/shared.dart'
     show
         UPnPObserver,
@@ -17,3 +12,5 @@ export 'src/shared/shared.dart'
         MSearchEvent,
         NetworkEventDirection,
         NetworkEventProtocol;
+export 'src/ssdp/ssdp.dart' show SearchTarget;
+export 'src/upnp/upnp.dart' hide DeviceManager;

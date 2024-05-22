@@ -18,7 +18,7 @@ void main() {
 
         expect(event.direction, equals(NetworkEventDirection.outgoing));
         expect(event.protocol, equals(NetworkEventProtocol.ssdp));
-        expect(event.messageType, equals('M-SEARCH'));
+        expect(event.type, equals('M-SEARCH'));
         expect(event.from, equals('127.0.0.1'));
       });
     });
@@ -41,7 +41,7 @@ void main() {
 
         expect(event.direction, equals(NetworkEventDirection.incoming));
         expect(event.protocol, NetworkEventProtocol.ssdp);
-        expect(event.messageType, 'NOTIFY');
+        expect(event.type, 'NOTIFY');
         expect(event.from, 'test.com');
       });
     });
@@ -70,7 +70,7 @@ void main() {
 
         expect(event.direction, equals(NetworkEventDirection.outgoing));
         expect(event.protocol, NetworkEventProtocol.http);
-        expect(event.messageType, equals('HTTP GET'));
+        expect(event.type, equals('HTTP GET'));
         expect(event.from, equals('127.0.0.1'));
         expect(event.to, equals('test.com'));
       });

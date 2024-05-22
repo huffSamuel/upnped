@@ -1,5 +1,6 @@
 part of 'ssdp.dart';
 
+/// A string that determines which UPnP devices reply to search requests.
 class SearchTarget {
   /// Search for all devices and services.
   static const String all = 'ssdp:all';

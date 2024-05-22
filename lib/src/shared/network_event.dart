@@ -11,24 +11,38 @@ enum NetworkEventDirection {
   outgoing,
 }
 
+/// A network event that occurred as part of UPnP discovery or control.
 abstract class NetworkEvent {
+  /// Direction of the event.
   final NetworkEventDirection direction;
+
+  /// Network protocol that triggered the event.
   final NetworkEventProtocol protocol;
+
+  /// Time when this event was sent or received.
   final DateTime time;
-  final String messageType;
+
+  /// The type of the message.
+  final String type;
+
+  /// Host where this message originated.
   final String? from;
+
+  /// Host where this message was sent.
   final String? to;
 
   NetworkEvent({
     required this.direction,
     required this.protocol,
-    required this.messageType,
+    required this.type,
     this.from,
     this.to,
   }) : time = DateTime.now();
 }
 
+/// An M-SEARCH event that occurred as part of UPnP discovery.
 class MSearchEvent extends NetworkEvent {
+  /// Raw content of the M-SEARCH event.
   final String content;
 
   MSearchEvent(
@@ -37,7 +51,7 @@ class MSearchEvent extends NetworkEvent {
     super.from = '127.0.0.1',
   }) : super(
           protocol: NetworkEventProtocol.ssdp,
-          messageType: 'M-SEARCH',
+          type: 'M-SEARCH',
         );
 
   @override
@@ -46,15 +60,19 @@ class MSearchEvent extends NetworkEvent {
   }
 }
 
+/// A NOTIFY event that occurred as part of UPnP discovery.
 class NotifyEvent extends NetworkEvent {
+  /// Raw content of the NOTIFY event.
   final String content;
+
+  /// URI where this event originated from.
   final Uri uri;
 
   NotifyEvent(this.uri, this.content)
       : super(
           direction: NetworkEventDirection.incoming,
           protocol: NetworkEventProtocol.ssdp,
-          messageType: 'NOTIFY',
+          type: 'NOTIFY',
           from: uri.host,
         );
 
@@ -64,12 +82,17 @@ class NotifyEvent extends NetworkEvent {
   }
 }
 
+/// An HTTP event that occurred as part of UPnP discovery or control.
 class HttpEvent extends NetworkEvent {
+  /// HTTP response object.
   final http.Response response;
+
+  /// HTTP request object.
   http.Request get request => response.request! as http.Request;
 
   String? _body;
 
+  /// The formatted response body.
   String get responseBody =>
       _body ??= XmlDocument.parse(response.body).toXmlString(pretty: true);
 
@@ -78,7 +101,7 @@ class HttpEvent extends NetworkEvent {
   ) : super(
           direction: NetworkEventDirection.outgoing,
           protocol: NetworkEventProtocol.http,
-          messageType: 'HTTP ${response.request!.method}',
+          type: 'HTTP ${response.request!.method}',
           from: '127.0.0.1',
           to: response.request!.url.host,
         );

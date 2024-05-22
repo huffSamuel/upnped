@@ -26,7 +26,7 @@ class SocketProxy {
   }
 
   Future<void> destroy() async {
-    final group = _group(socket.address.type);
+    final group = _multicastAddress(socket.address.type);
 
     await _sub?.cancel();
 

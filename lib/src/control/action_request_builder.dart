@@ -34,7 +34,7 @@ class ActionRequestBuilder {
   /// Build a new `ActionRequest`.
   ActionRequest build(
     String userAgent,
-    ActionRequestParams params,
+    ActionParams params,
   ) {
     final urn = sprintf(
       _soapUrn,
