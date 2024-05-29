@@ -76,21 +76,25 @@ enum DataTypeValue {
   dateTime,
 
   /// Date in ISO 8601 format with allowed time and time zone.
+  // ignore: constant_identifier_names
   dateTime_tz,
 
   /// Time in a subset of ISO 8601 format with neither date nor time zone.
   time,
 
   /// Time in a subset of ISO 8601 format with no date.
+  // ignore: constant_identifier_names
   time_tz,
 
   /// `"0"` for false or `"1"` for true.
   boolean,
 
   /// MIME-style Base64 encoded binary BLOB.
+  // ignore: constant_identifier_names
   bin_base64,
 
   /// Hexadecimal digits represented by octets.
+  // ignore: constant_identifier_names
   bin_hex,
 
   /// Universal Resource Identifier.

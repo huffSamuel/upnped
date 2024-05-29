@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 import 'package:upnped/src/shared/messages.dart';
 import 'package:upnped/src/ssdp/ssdp.dart';
 
-final message = '''NOTIFY * HTTP/1.1\r
+const message = '''NOTIFY * HTTP/1.1\r
 HOST: 239.255.255.250:1900\r
 CACHE-CONTROL: max-age=60\r
 LOCATION: http://192.168.0.1:1900/dryjn/rootDesc.xml\r
