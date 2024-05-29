@@ -1,5 +1,5 @@
 name: upnped
-description: A new Flutter package project.
+description: A Dart library for discovering and controlling UPnP devices.
 version: 1.0.0
 repository: https://github.com/huffSamuel/upnped
 homepage: https://github.com/huffSamuel/upnped
