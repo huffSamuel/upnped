@@ -13,7 +13,7 @@ class RawDatagramSocketFactory implements SocketFactory {
   const RawDatagramSocketFactory();
 
   // coverage:ignore-start
-  // Ignoring since we can't mock out the framework's static bind method. 
+  // Ignoring since we can't mock out the framework's static bind method.
   @override
   Future<RawDatagramSocket> create(
     InternetAddress address,

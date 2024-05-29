@@ -13,7 +13,8 @@ void main() {
     test('fromXml', () {
       final doc = XmlDocument.parse(xml);
 
-      final allowedValueRange = AllowedValueRange.fromXml(doc.getElement('allowedValueRange') as XmlNode);
+      final allowedValueRange = AllowedValueRange.fromXml(
+          doc.getElement('allowedValueRange') as XmlNode);
 
       expect(allowedValueRange.maximum, equals('100'));
       expect(allowedValueRange.minimum, equals('0'));

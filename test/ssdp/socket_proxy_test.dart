@@ -74,7 +74,7 @@ void main() {
 
           expectLater(() => proxy.destroy(), returnsNormally);
         });
-      }); 
+      });
 
       test('should close the socket', () async {
         await proxy.destroy();

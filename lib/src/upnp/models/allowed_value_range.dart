@@ -18,7 +18,7 @@ class AllowedValueRange {
     required this.minimum,
     required this.maximum,
     int? step,
-  }): step = step ?? 1;
+  }) : step = step ?? 1;
 
   factory AllowedValueRange.fromXml(XmlNode xml) {
     String? step = xml.getElement('step')?.innerText;

@@ -5,7 +5,7 @@ abstract class Device {
   final _activeController = BehaviorSubject<bool>()..add(true);
 
   /// Emits when the active state of this device changes.
-  /// 
+  ///
   /// Active state can be changed by the following events:
   /// - Network `ssdp:byebye` event
   /// - Network `ssdp:alive` event
@@ -16,7 +16,7 @@ abstract class Device {
   final NotifyDiscovered? notify;
 
   /// Device description.
-  /// 
+  ///
   /// This is the document advertized by the [notify] that defines the UPnP-spec
   /// device.
   final DeviceDescription description;

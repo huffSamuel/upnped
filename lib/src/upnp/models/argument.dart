@@ -47,8 +47,7 @@ class Argument {
   factory Argument.fromXml(XmlNode xml) {
     return Argument._(
       name: xml.getElement('name')!.innerText,
-      direction:
-          Direction.fromString(xml.getElement('direction')!.innerText),
+      direction: Direction.fromString(xml.getElement('direction')!.innerText),
       retval: xml.getElement('retval')?.innerText,
       relatedStateVariable: xml.getElement('relatedStateVariable')!.innerText,
     );

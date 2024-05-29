@@ -38,14 +38,21 @@ void main() {
     });
 
     test('cacheControl', () => expect(o.cacheControl, equals('max-age=60')));
-    test('location', () => expect(o.location, equals(Uri(
-      scheme: 'http',
-      host: '192.168.0.1',
-      port: 1900,
-      path: 'dryjn/rootDesc.xml',
-    ))));
+    test(
+        'location',
+        () => expect(
+            o.location,
+            equals(Uri(
+              scheme: 'http',
+              host: '192.168.0.1',
+              port: 1900,
+              path: 'dryjn/rootDesc.xml',
+            ))));
     test('nt', () => expect(o.nt, equals('upnp:rootdevice')));
-    test('server', () => expect(o.server, equals('TP-LINK/TP-LINK UPnP/1.1 MiniUPnPd/1.8')));
+    test(
+        'server',
+        () =>
+            expect(o.server, equals('TP-LINK/TP-LINK UPnP/1.1 MiniUPnPd/1.8')));
     test('searchPort', () => expect(o.searchPort, equals(null)));
     test('secureLocation', () => expect(o.secureLocation, equals(null)));
   });

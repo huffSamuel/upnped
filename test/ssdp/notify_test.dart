@@ -41,20 +41,20 @@ void main() {
       expect(actual, equals(expected));
     });
 
-  group('headers', () {
-    test('should return the expected map', () {
-      final n = Notify(notify, expectedHeaders);
+    group('headers', () {
+      test('should return the expected map', () {
+        final n = Notify(notify, expectedHeaders);
 
-      expect(n.headers, equals(expectedHeaders));
+        expect(n.headers, equals(expectedHeaders));
+      });
     });
-  });
 
-   group('toString', ()  {
-    test('should return the message', () {
-      final n = Notify(notify, expectedHeaders);
+    group('toString', () {
+      test('should return the message', () {
+        final n = Notify(notify, expectedHeaders);
 
-      expect(n.toString(), equals(notify));
+        expect(n.toString(), equals(notify));
+      });
     });
-   });
   });
 }

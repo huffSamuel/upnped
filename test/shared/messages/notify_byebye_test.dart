@@ -18,7 +18,6 @@ BOOTID.UPNP.ORG: 1\r
 CONFIGID.UPNP.ORG: 1337\r
 ''';
 
-
 void main() {
   group('NotifyByeBye', () {
     late NotifyByeBye n;
@@ -27,10 +26,12 @@ void main() {
       n = NotifyByeBye(Notify.parse(message));
     });
 
-    test('host', () => expect(n.host, equals(InternetAddressAndPort(
-      address: InternetAddress('239.255.255.250'),
-      port: '1900'
-    ))));
+    test(
+        'host',
+        () => expect(
+            n.host,
+            equals(InternetAddressAndPort(
+                address: InternetAddress('239.255.255.250'), port: '1900'))));
 
     test('nt', () => expect(n.nt, equals('upnp:rootdevice')));
   });

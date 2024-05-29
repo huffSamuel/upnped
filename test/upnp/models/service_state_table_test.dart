@@ -14,7 +14,8 @@ void main() {
     test('fromXml', () {
       final doc = XmlDocument.parse(xml);
 
-      final actual = ServiceStateTable.fromXml(doc.getElement('serviceStateTable')!);
+      final actual =
+          ServiceStateTable.fromXml(doc.getElement('serviceStateTable')!);
 
       expect(actual.stateVariables, hasLength(1));
     });

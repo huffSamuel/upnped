@@ -12,7 +12,7 @@ class Options {
   /// The maximum number of network hops for M-SEARCH requests.
   ///
   /// If not provided this value defaults to **1**, which causes traffic to stay on the local network.
-  /// 
+  ///
   /// Increasing this value beyond 1 is not recommended, but is supported by UPnP.
   final int multicastHops;
 

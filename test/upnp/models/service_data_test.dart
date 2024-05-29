@@ -21,7 +21,8 @@ void main() {
       expect(actual.serviceVersion, equals('1'));
       expect(actual.serviceId, isNotNull);
       expect(actual.scpdurl, equals(Uri(path: '/MultiChannelSCPD.xml')));
-      expect(actual.controlUrl, equals(Uri(path: '/upnp/control/MultiChannel')));
+      expect(
+          actual.controlUrl, equals(Uri(path: '/upnp/control/MultiChannel')));
       expect(actual.eventSubUrl, equals(Uri(path: '/upnp/event/MultiChannel')));
     });
   });

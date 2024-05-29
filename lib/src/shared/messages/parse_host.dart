@@ -5,7 +5,7 @@ class InternetAddressAndPort extends Equatable {
   final String port;
 
   const InternetAddressAndPort({required this.address, required this.port});
-  
+
   @override
   List<Object?> get props => [address, port];
 }

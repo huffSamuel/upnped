@@ -10,7 +10,7 @@ enum NotificationSubtype {
   const NotificationSubtype(this.value);
 
   factory NotificationSubtype.parse(String? value) {
-    for(final v in NotificationSubtype.values) {
+    for (final v in NotificationSubtype.values) {
       if (v.value == value) {
         return v;
       }

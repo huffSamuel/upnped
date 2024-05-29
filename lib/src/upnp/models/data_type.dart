@@ -106,7 +106,6 @@ enum DataTypeValue {
 
 /// A datatype that a [StateVariable] contains.
 class DataType {
-
   /// The underlying type.
   final DataTypeValue type;
 
