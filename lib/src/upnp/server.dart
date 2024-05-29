@@ -57,13 +57,13 @@ class Server {
 
     switch (nts) {
       case NotificationSubtype.byebye:
-      _deviceBuilder.deactivateDevice(NotifyByeBye(event));
+        _deviceBuilder.deactivateDevice(NotifyByeBye(event));
         break;
       case NotificationSubtype.alive:
-      _deviceBuilder.activateDevice(NotifyAlive(event));
+        _deviceBuilder.activateDevice(NotifyAlive(event));
         break;
       default:
-        // NO-OP
+      // NO-OP
     }
   }
 
@@ -93,7 +93,7 @@ class Server {
   ///
   /// If [maxResponseTime] is omitted, defaults to [defaultResponseSeconds]. [maxResponseTime] should be less
   /// than 6 seconds.
-  /// 
+  ///
   /// If [searchTarget] is omitted, defaults to [defaultSearchTarget].
   ///
   /// The returned future resolves after the [maxResponseTime] has elapsed.

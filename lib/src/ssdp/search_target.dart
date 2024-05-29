@@ -20,13 +20,13 @@ class SearchTarget {
       ('urn:schemas-upnp-org:service:$serviceType:$ver');
 
   /// Search for any device of this type.
-  /// 
+  ///
   /// {domain}, {deviceType}, and {ver} are defined by the UPnP vendor.
   static String vendorDomain(String domain, String deviceType, String ver) =>
       ('urn:${_sanitize(domain)}:device:$deviceType:$ver');
 
   /// Search for any service of this type.
-  /// 
+  ///
   /// {domain}, {serviceType}, and {ver} are defined by the UPnP vendor.
   static String vendorService(String domain, String serviceType, String ver) =>
       ('urn:${_sanitize(domain)}:service:$serviceType:$ver');

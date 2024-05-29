@@ -10,7 +10,7 @@ class Service {
   /// This the document obtained from the [ServiceDescription.scpdurl].
   final ServiceDescription? description;
 
-  /// URL used to access this service. 
+  /// URL used to access this service.
   final Uri location;
 
   Service(

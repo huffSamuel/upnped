@@ -19,9 +19,7 @@ void main() {
           serviceVersion: '1',
           uri: Uri(),
           controlPath: 'path',
-          arguments: const {
-            'foo': 'bar'
-          },
+          arguments: const {'foo': 'bar'},
         );
 
         final actual = builder.build('test/1.0', params);

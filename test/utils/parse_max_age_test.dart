@@ -11,7 +11,7 @@ void main() {
       ('max-age=10, max-age=20', Duration(seconds: 20))
     ];
 
-    for(final c in cases) {
+    for (final c in cases) {
       test('when input is ${c.$1} expect ${c.$2}', () {
         final actual = parseMaxAge(c.$1);
 
