@@ -5,7 +5,6 @@ class NotifyKey {
   static String get date => 'date';
   static String get ext => 'ext';
   static String get location => 'location';
-  static String get opt => 'opt';
   static String get server => 'server';
   static String get st => 'st';
   static String get usn => 'usn';

@@ -23,6 +23,18 @@ void main() {
       proxy = SocketProxy(mockSocket, [mockNetworkInterface]);
     });
 
+    group('address', () {
+      test('should return underlying socket address', () {
+        final expected = InternetAddress.anyIPv4;
+
+        when(mockSocket.address).thenReturn(expected);
+
+        final actual = proxy.address;
+
+        expect(actual, equals(expected));
+      });
+    });
+
     group('send', () {
       test('should call send on the socket', () {
         proxy.send([0], InternetAddress.anyIPv4, 2000);
@@ -42,16 +54,40 @@ void main() {
         verify(mockSocket.leaveMulticast(any));
       });
 
+      group('when leaving multicast throws an OSError', () {
+        test('destroy should not fail', () {
+          when(mockSocket.leaveMulticast(any)).thenThrow(const OSError());
+
+          expectLater(() => proxy.destroy(), returnsNormally);
+        });
+      });
+
       test('should leave the interface multicast groups', () async {
         await proxy.destroy();
 
         verify(mockSocket.leaveMulticast(any, mockNetworkInterface));
       });
 
+      group('when leaving interface multicast groups throws an OSError', () {
+        test('destroy should not fail', () {
+          when(mockSocket.leaveMulticast(any, any)).thenThrow(const OSError());
+
+          expectLater(() => proxy.destroy(), returnsNormally);
+        });
+      }); 
+
       test('should close the socket', () async {
         await proxy.destroy();
 
         verify(mockSocket.close());
+      });
+
+      group('when socket close fails', () {
+        test('destroy should not fail', () {
+          when(mockSocket.close()).thenThrow('');
+
+          expectLater(() => proxy.destroy(), returnsNormally);
+        });
       });
     });
 

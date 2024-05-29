@@ -43,7 +43,7 @@ class DeviceManager {
 
     final deviceDocument =
         XmlDocument.parse(response.body).rootElement.getElement('device');
-    final device = DeviceDocument.fromXml(deviceDocument!);
+    final device = DeviceDescription.fromXml(deviceDocument!);
 
     final aggregate = await _getDevice(
       notify,
@@ -63,10 +63,10 @@ class DeviceManager {
     return rootDevice;
   }
 
-  Future<ServiceAggregate> _getService(
+  Future<Service> _getService(
     NotifyDiscovered client,
     Map<String, String> headers,
-    ServiceDescription document,
+    ServiceData document,
   ) async {
     final uri = Uri(
       scheme: client.location!.scheme,
@@ -75,12 +75,12 @@ class DeviceManager {
       pathSegments: document.scpdurl.pathSegments,
     );
 
-    Service? service;
+    ServiceDescription? service;
 
     try {
       final response = await _get(uri, headers: headers);
 
-      service = Service.fromXml(
+      service = ServiceDescription.fromXml(
         XmlDocument.parse(
           response.body,
         ),
@@ -89,7 +89,7 @@ class DeviceManager {
       service = null;
     }
 
-    return ServiceAggregate(
+    return Service(
       document,
       service,
       uri,
@@ -98,7 +98,7 @@ class DeviceManager {
 
   Future<_DeviceImpl> _getDevice(
     NotifyDiscovered client,
-    DeviceDocument device,
+    DeviceDescription device,
     Map<String, String> headers,
   ) async {
     final services = await Future.wait(

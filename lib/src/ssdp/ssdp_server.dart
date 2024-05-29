@@ -17,10 +17,12 @@ sealed class NetworkInterfaceLister {
   Future<List<NetworkInterface>> list();
 }
 
+// coverage:ignore-start
 class NativeNetworkInterfaceLister implements NetworkInterfaceLister {
   @override
   Future<List<NetworkInterface>> list() => NetworkInterface.list();
 }
+// coverage:ignore-end
 
 class Server {
   final _discoveredController = StreamController<Notify>();
@@ -114,7 +116,7 @@ class Server {
 
         networkController.add(MSearchEvent(request.toString()));
       } on SocketException catch (e) {
-        log('error', 'Unable to send MSEARCH packet', {"exception": e});
+        Log.error('Unable to send MSEARCH packet', {"exception": e});
       }
     }
   }
@@ -132,19 +134,19 @@ class Server {
     try {
       if (lines[0].contains(MSearch.method)) {
         // TODO: Emit an MSEARCH network event
-        log('info', 'M-SEARCH request heard', {
+        Log.info('M-SEARCH request heard', {
           'data': lines,
         });
         return;
       }
 
-      final notify = Notify.fromData(data);
+      final notify = Notify.parse(data);
 
       final device = NotifyDiscovered(notify);
       networkController.add(NotifyEvent(device.location!, notify.toString()));
       _discoveredController.add(notify);
     } catch (err) {
-      log('error', 'Unable to parse packet as NOTIFY', {
+      Log.error('Unable to parse packet as NOTIFY', {
         'packet': utf8.decode(packet.data),
         'port': packet.port,
         'address': packet.address

@@ -2,15 +2,15 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:http/http.dart' as http;
-import 'package:upnped/src/ssdp/ssdp.dart';
 import 'package:upnped/src/upnp/upnp.dart';
+import 'package:upnped/upnped.dart';
 
 import '../util.dart';
 @GenerateNiceMocks([
   MockSpec<http.Client>(),
   MockSpec<http.Response>(),
   MockSpec<http.Request>(),
-  MockSpec<Notify>(),
+  MockSpec<NotifyDiscovered>(),
 ])
 import 'device_builder_test.mocks.dart';
 
@@ -105,7 +105,7 @@ void main() {
       test('should get the device document', () async {
         final expectedHeaders = {'accept-language': 'en'};
         final expectedUri = Uri.parse('http://test.com');
-        final mockDevice = MockDevice();
+        final mockDevice = MockNotifyDiscovered();
         when(mockDevice.location).thenReturn(expectedUri);
 
         try {
@@ -123,7 +123,7 @@ void main() {
       test('should get the root device', () async {
         final deviceDocumentUri =
             Uri.parse('http://192.168.0.135:64321/bar-cl3-ms.xml');
-        final mockDevice = MockDevice();
+        final mockDevice = MockNotifyDiscovered();
         when(mockDevice.location).thenReturn(deviceDocumentUri);
         final mockResponse = MockResponse();
         when(mockResponse.body).thenReturn(rootDeviceDocument);
@@ -151,7 +151,7 @@ void main() {
       test('should get service documents', () async {
         final deviceDocumentUri =
             Uri.parse('http://192.168.0.135:64321/bar-cl3-ms.xml');
-        final mockDevice = MockDevice();
+        final mockDevice = MockNotifyDiscovered();
         when(mockDevice.location).thenReturn(deviceDocumentUri);
         final mockResponse = MockResponse();
         when(mockResponse.body).thenReturn(rootDeviceDocument);

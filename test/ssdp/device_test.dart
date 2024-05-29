@@ -8,14 +8,14 @@ void main() {
   group('device', () {
     group('toString', () {
       test('should return expected string', () {
-        final device = Notify.fromData(notify);
+        final device = Notify.parse(notify);
 
         expect(device.toString(), equals(notify));
       });
     });
     group('props', () {
       test('should return the expected properties', () {
-        final device = Notify.fromData(notify);
+        final device = Notify.parse(notify);
 
         expect(device.props, equals([notify]));
       });

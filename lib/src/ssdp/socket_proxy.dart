@@ -33,21 +33,21 @@ class SocketProxy {
     try {
       socket.leaveMulticast(group);
     } on OSError {
-      log('warn', 'Failed to leave multicast group');
+      Log.warn('Failed to leave multicast group');
     }
 
     for (final interface in networkInterfaces) {
       try {
         socket.leaveMulticast(group, interface);
       } on OSError {
-        log('warn', 'Failed to leave interface multicast group');
+        Log.warn('Failed to leave interface multicast group');
       }
     }
 
     try {
       socket.close();
     } catch (err) {
-      log('error', 'Failed to close socket');
+      Log.error('Failed to close socket');
     }
   }
 }

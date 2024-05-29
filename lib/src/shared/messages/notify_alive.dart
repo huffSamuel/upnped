@@ -13,7 +13,7 @@ class NotifyAlive extends NotifyDecorator {
   ];
 
   /// The multicast address and port reserved for SSDP.
-  InternetAddress get host => parseHost(headers[NotifyKey.host]!);
+  InternetAddressAndPort get host => parseHost(headers[NotifyKey.host]!);
 
   /// Max duration, in seconds, after which control points should assume this device
   /// is no longer available.

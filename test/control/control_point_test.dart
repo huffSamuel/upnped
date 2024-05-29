@@ -29,7 +29,7 @@ void main() {
       serviceVersion: '1',
       uri: Uri.parse('http://www.upnp.org:4200'),
       controlPath: 'control',
-      arguments: {},
+      arguments: const {},
     );
 
     setUp(() {

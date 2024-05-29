@@ -8,7 +8,7 @@ class NotifyByeBye extends NotifyDecorator {
   ];
 
   /// The multicast address and port reserved for SSDP.
-  InternetAddress get host => parseHost(headers[NotifyKey.host]!);
+  InternetAddressAndPort get host => parseHost(headers[NotifyKey.host]!);
 
   /// Notification type.
   String get nt => headers[NotifyKey.nt]!;

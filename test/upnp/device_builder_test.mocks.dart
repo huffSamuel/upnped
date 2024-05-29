@@ -3,14 +3,16 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i6;
+import 'dart:collection' as _i5;
 import 'dart:convert' as _i3;
-import 'dart:typed_data' as _i6;
+import 'dart:typed_data' as _i8;
 
 import 'package:http/http.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i5;
-import 'package:upnped/src/ssdp/ssdp.dart' as _i7;
+import 'package:mockito/src/dummies.dart' as _i7;
+import 'package:upnped/src/shared/messages.dart' as _i9;
+import 'package:upnped/src/ssdp/ssdp.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -66,12 +68,33 @@ class _FakeUri_3 extends _i1.SmartFake implements Uri {
         );
 }
 
+class _FakeNotify_4 extends _i1.SmartFake implements _i4.Notify {
+  _FakeNotify_4(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeUnmodifiableMapView_5<K, V> extends _i1.SmartFake
+    implements _i5.UnmodifiableMapView<K, V> {
+  _FakeUnmodifiableMapView_5(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [Client].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockClient extends _i1.Mock implements _i2.Client {
   @override
-  _i4.Future<_i2.Response> head(
+  _i6.Future<_i2.Response> head(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -81,7 +104,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i4.Future<_i2.Response>.value(_FakeResponse_0(
+        returnValue: _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #head,
@@ -90,7 +113,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.Response>.value(_FakeResponse_0(
+            _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #head,
@@ -98,10 +121,10 @@ class MockClient extends _i1.Mock implements _i2.Client {
             {#headers: headers},
           ),
         )),
-      ) as _i4.Future<_i2.Response>);
+      ) as _i6.Future<_i2.Response>);
 
   @override
-  _i4.Future<_i2.Response> get(
+  _i6.Future<_i2.Response> get(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -111,7 +134,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i4.Future<_i2.Response>.value(_FakeResponse_0(
+        returnValue: _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #get,
@@ -120,7 +143,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.Response>.value(_FakeResponse_0(
+            _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #get,
@@ -128,10 +151,10 @@ class MockClient extends _i1.Mock implements _i2.Client {
             {#headers: headers},
           ),
         )),
-      ) as _i4.Future<_i2.Response>);
+      ) as _i6.Future<_i2.Response>);
 
   @override
-  _i4.Future<_i2.Response> post(
+  _i6.Future<_i2.Response> post(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
@@ -147,7 +170,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i4.Future<_i2.Response>.value(_FakeResponse_0(
+        returnValue: _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #post,
@@ -160,7 +183,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.Response>.value(_FakeResponse_0(
+            _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #post,
@@ -172,10 +195,10 @@ class MockClient extends _i1.Mock implements _i2.Client {
             },
           ),
         )),
-      ) as _i4.Future<_i2.Response>);
+      ) as _i6.Future<_i2.Response>);
 
   @override
-  _i4.Future<_i2.Response> put(
+  _i6.Future<_i2.Response> put(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
@@ -191,7 +214,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i4.Future<_i2.Response>.value(_FakeResponse_0(
+        returnValue: _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #put,
@@ -204,7 +227,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.Response>.value(_FakeResponse_0(
+            _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #put,
@@ -216,10 +239,10 @@ class MockClient extends _i1.Mock implements _i2.Client {
             },
           ),
         )),
-      ) as _i4.Future<_i2.Response>);
+      ) as _i6.Future<_i2.Response>);
 
   @override
-  _i4.Future<_i2.Response> patch(
+  _i6.Future<_i2.Response> patch(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
@@ -235,7 +258,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i4.Future<_i2.Response>.value(_FakeResponse_0(
+        returnValue: _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #patch,
@@ -248,7 +271,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.Response>.value(_FakeResponse_0(
+            _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #patch,
@@ -260,10 +283,10 @@ class MockClient extends _i1.Mock implements _i2.Client {
             },
           ),
         )),
-      ) as _i4.Future<_i2.Response>);
+      ) as _i6.Future<_i2.Response>);
 
   @override
-  _i4.Future<_i2.Response> delete(
+  _i6.Future<_i2.Response> delete(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
@@ -279,7 +302,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i4.Future<_i2.Response>.value(_FakeResponse_0(
+        returnValue: _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #delete,
@@ -292,7 +315,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.Response>.value(_FakeResponse_0(
+            _i6.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #delete,
@@ -304,10 +327,10 @@ class MockClient extends _i1.Mock implements _i2.Client {
             },
           ),
         )),
-      ) as _i4.Future<_i2.Response>);
+      ) as _i6.Future<_i2.Response>);
 
   @override
-  _i4.Future<String> read(
+  _i6.Future<String> read(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -317,7 +340,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i4.Future<String>.value(_i5.dummyValue<String>(
+        returnValue: _i6.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #read,
@@ -326,7 +349,7 @@ class MockClient extends _i1.Mock implements _i2.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<String>.value(_i5.dummyValue<String>(
+            _i6.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #read,
@@ -334,10 +357,10 @@ class MockClient extends _i1.Mock implements _i2.Client {
             {#headers: headers},
           ),
         )),
-      ) as _i4.Future<String>);
+      ) as _i6.Future<String>);
 
   @override
-  _i4.Future<_i6.Uint8List> readBytes(
+  _i6.Future<_i8.Uint8List> readBytes(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -347,20 +370,20 @@ class MockClient extends _i1.Mock implements _i2.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i4.Future<_i6.Uint8List>.value(_i6.Uint8List(0)),
+        returnValue: _i6.Future<_i8.Uint8List>.value(_i8.Uint8List(0)),
         returnValueForMissingStub:
-            _i4.Future<_i6.Uint8List>.value(_i6.Uint8List(0)),
-      ) as _i4.Future<_i6.Uint8List>);
+            _i6.Future<_i8.Uint8List>.value(_i8.Uint8List(0)),
+      ) as _i6.Future<_i8.Uint8List>);
 
   @override
-  _i4.Future<_i2.StreamedResponse> send(_i2.BaseRequest? request) =>
+  _i6.Future<_i2.StreamedResponse> send(_i2.BaseRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #send,
           [request],
         ),
         returnValue:
-            _i4.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_1(
+            _i6.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_1(
           this,
           Invocation.method(
             #send,
@@ -368,14 +391,14 @@ class MockClient extends _i1.Mock implements _i2.Client {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_1(
+            _i6.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_1(
           this,
           Invocation.method(
             #send,
             [request],
           ),
         )),
-      ) as _i4.Future<_i2.StreamedResponse>);
+      ) as _i6.Future<_i2.StreamedResponse>);
 
   @override
   void close() => super.noSuchMethod(
@@ -392,20 +415,20 @@ class MockClient extends _i1.Mock implements _i2.Client {
 /// See the documentation for Mockito's code generation for more information.
 class MockResponse extends _i1.Mock implements _i2.Response {
   @override
-  _i6.Uint8List get bodyBytes => (super.noSuchMethod(
+  _i8.Uint8List get bodyBytes => (super.noSuchMethod(
         Invocation.getter(#bodyBytes),
-        returnValue: _i6.Uint8List(0),
-        returnValueForMissingStub: _i6.Uint8List(0),
-      ) as _i6.Uint8List);
+        returnValue: _i8.Uint8List(0),
+        returnValueForMissingStub: _i8.Uint8List(0),
+      ) as _i8.Uint8List);
 
   @override
   String get body => (super.noSuchMethod(
         Invocation.getter(#body),
-        returnValue: _i5.dummyValue<String>(
+        returnValue: _i7.dummyValue<String>(
           this,
           Invocation.getter(#body),
         ),
-        returnValueForMissingStub: _i5.dummyValue<String>(
+        returnValueForMissingStub: _i7.dummyValue<String>(
           this,
           Invocation.getter(#body),
         ),
@@ -483,11 +506,11 @@ class MockRequest extends _i1.Mock implements _i2.Request {
       );
 
   @override
-  _i6.Uint8List get bodyBytes => (super.noSuchMethod(
+  _i8.Uint8List get bodyBytes => (super.noSuchMethod(
         Invocation.getter(#bodyBytes),
-        returnValue: _i6.Uint8List(0),
-        returnValueForMissingStub: _i6.Uint8List(0),
-      ) as _i6.Uint8List);
+        returnValue: _i8.Uint8List(0),
+        returnValueForMissingStub: _i8.Uint8List(0),
+      ) as _i8.Uint8List);
 
   @override
   set bodyBytes(List<int>? value) => super.noSuchMethod(
@@ -501,11 +524,11 @@ class MockRequest extends _i1.Mock implements _i2.Request {
   @override
   String get body => (super.noSuchMethod(
         Invocation.getter(#body),
-        returnValue: _i5.dummyValue<String>(
+        returnValue: _i7.dummyValue<String>(
           this,
           Invocation.getter(#body),
         ),
-        returnValueForMissingStub: _i5.dummyValue<String>(
+        returnValueForMissingStub: _i7.dummyValue<String>(
           this,
           Invocation.getter(#body),
         ),
@@ -539,11 +562,11 @@ class MockRequest extends _i1.Mock implements _i2.Request {
   @override
   String get method => (super.noSuchMethod(
         Invocation.getter(#method),
-        returnValue: _i5.dummyValue<String>(
+        returnValue: _i7.dummyValue<String>(
           this,
           Invocation.getter(#method),
         ),
-        returnValueForMissingStub: _i5.dummyValue<String>(
+        returnValueForMissingStub: _i7.dummyValue<String>(
           this,
           Invocation.getter(#method),
         ),
@@ -630,14 +653,14 @@ class MockRequest extends _i1.Mock implements _i2.Request {
           #finalize,
           [],
         ),
-        returnValue: _i5.dummyValue<_i2.ByteStream>(
+        returnValue: _i7.dummyValue<_i2.ByteStream>(
           this,
           Invocation.method(
             #finalize,
             [],
           ),
         ),
-        returnValueForMissingStub: _i5.dummyValue<_i2.ByteStream>(
+        returnValueForMissingStub: _i7.dummyValue<_i2.ByteStream>(
           this,
           Invocation.method(
             #finalize,
@@ -647,13 +670,13 @@ class MockRequest extends _i1.Mock implements _i2.Request {
       ) as _i2.ByteStream);
 
   @override
-  _i4.Future<_i2.StreamedResponse> send() => (super.noSuchMethod(
+  _i6.Future<_i2.StreamedResponse> send() => (super.noSuchMethod(
         Invocation.method(
           #send,
           [],
         ),
         returnValue:
-            _i4.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_1(
+            _i6.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_1(
           this,
           Invocation.method(
             #send,
@@ -661,24 +684,135 @@ class MockRequest extends _i1.Mock implements _i2.Request {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_1(
+            _i6.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_1(
           this,
           Invocation.method(
             #send,
             [],
           ),
         )),
-      ) as _i4.Future<_i2.StreamedResponse>);
+      ) as _i6.Future<_i2.StreamedResponse>);
 }
 
-/// A class which mocks [Device].
+/// A class which mocks [NotifyDiscovered].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDevice extends _i1.Mock implements _i7.NotifyDiscovered {
+class MockNotifyDiscovered extends _i1.Mock implements _i9.NotifyDiscovered {
+  @override
+  String get st => (super.noSuchMethod(
+        Invocation.getter(#st),
+        returnValue: _i7.dummyValue<String>(
+          this,
+          Invocation.getter(#st),
+        ),
+        returnValueForMissingStub: _i7.dummyValue<String>(
+          this,
+          Invocation.getter(#st),
+        ),
+      ) as String);
+
+  @override
+  _i4.Notify get wrapped => (super.noSuchMethod(
+        Invocation.getter(#wrapped),
+        returnValue: _FakeNotify_4(
+          this,
+          Invocation.getter(#wrapped),
+        ),
+        returnValueForMissingStub: _FakeNotify_4(
+          this,
+          Invocation.getter(#wrapped),
+        ),
+      ) as _i4.Notify);
+
+  @override
+  _i9.NotificationSubtype get nts => (super.noSuchMethod(
+        Invocation.getter(#nts),
+        returnValue: _i9.NotificationSubtype.none,
+        returnValueForMissingStub: _i9.NotificationSubtype.none,
+      ) as _i9.NotificationSubtype);
+
+  @override
+  String get usn => (super.noSuchMethod(
+        Invocation.getter(#usn),
+        returnValue: _i7.dummyValue<String>(
+          this,
+          Invocation.getter(#usn),
+        ),
+        returnValueForMissingStub: _i7.dummyValue<String>(
+          this,
+          Invocation.getter(#usn),
+        ),
+      ) as String);
+
+  @override
+  int get bootId => (super.noSuchMethod(
+        Invocation.getter(#bootId),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  int get configId => (super.noSuchMethod(
+        Invocation.getter(#configId),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  _i5.UnmodifiableMapView<String, String> get headers => (super.noSuchMethod(
+        Invocation.getter(#headers),
+        returnValue: _FakeUnmodifiableMapView_5<String, String>(
+          this,
+          Invocation.getter(#headers),
+        ),
+        returnValueForMissingStub: _FakeUnmodifiableMapView_5<String, String>(
+          this,
+          Invocation.getter(#headers),
+        ),
+      ) as _i5.UnmodifiableMapView<String, String>);
+
+  @override
+  _i5.UnmodifiableMapView<String, String> get extensions => (super.noSuchMethod(
+        Invocation.getter(#extensions),
+        returnValue: _FakeUnmodifiableMapView_5<String, String>(
+          this,
+          Invocation.getter(#extensions),
+        ),
+        returnValueForMissingStub: _FakeUnmodifiableMapView_5<String, String>(
+          this,
+          Invocation.getter(#extensions),
+        ),
+      ) as _i5.UnmodifiableMapView<String, String>);
+
   @override
   List<Object?> get props => (super.noSuchMethod(
         Invocation.getter(#props),
         returnValue: <Object?>[],
         returnValueForMissingStub: <Object?>[],
       ) as List<Object?>);
+
+  @override
+  String? extension(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #extension,
+          [key],
+        ),
+        returnValueForMissingStub: null,
+      ) as String?);
+
+  @override
+  T? allowed<T>(
+    String? key,
+    T Function(String)? fn,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #allowed,
+          [
+            key,
+            fn,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      ) as T?);
 }

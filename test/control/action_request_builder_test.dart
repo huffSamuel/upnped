@@ -19,7 +19,9 @@ void main() {
           serviceVersion: '1',
           uri: Uri(),
           controlPath: 'path',
-          arguments: {},
+          arguments: const {
+            'foo': 'bar'
+          },
         );
 
         final actual = builder.build('test/1.0', params);
@@ -34,7 +36,7 @@ void main() {
           serviceVersion: 'version',
           uri: Uri.parse('http://www.upnp.org:4200'),
           controlPath: 'control',
-          arguments: {},
+          arguments: const {},
         );
 
         final expected = ActionRequest(

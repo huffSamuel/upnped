@@ -4,6 +4,7 @@ part of 'control.dart';
 class ControlPoint {
   static ControlPoint? _instance;
 
+  // coverage:ignore-start
   /// Get the instance of the UPnP device control point.
   static ControlPoint getInstance() {
     return _instance ??= ControlPoint._(
@@ -12,6 +13,7 @@ class ControlPoint {
       userAgentFactory: PlatformUserAgentFactory(),
     );
   }
+  // coverage:ignore-end
 
   final http.Client _client;
   final ActionRequestBuilder _builder;

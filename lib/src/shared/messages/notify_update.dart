@@ -12,7 +12,7 @@ class NotifyUpdate extends NotifyDecorator {
   ];
 
   /// The multicast address and port reserved for SSDP.
-  InternetAddress get host => parseHost(headers[NotifyKey.host]!);
+  InternetAddressAndPort get host => parseHost(headers[NotifyKey.host]!);
 
   /// URL to the UPnP description of the root device.
   Uri get location => Uri.parse(headers[NotifyKey.location]!);

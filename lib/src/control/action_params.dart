@@ -1,6 +1,6 @@
 part of 'control.dart';
 
-class ActionParams {
+class ActionParams extends Equatable {
   /// The name of the action to invoke.
   final String actionName;
 
@@ -19,7 +19,7 @@ class ActionParams {
   /// Map of arguments.
   final Map<String, dynamic> arguments;
 
-  ActionParams({
+  const ActionParams({
     required this.actionName,
     required this.serviceType,
     required this.serviceVersion,
@@ -29,7 +29,7 @@ class ActionParams {
   });
 
   factory ActionParams.fromService(
-    ServiceAggregate service,
+    Service service,
     String actionName,
     Map<String, dynamic> arguments,
   ) {
@@ -42,4 +42,7 @@ class ActionParams {
       arguments: arguments,
     );
   }
+  
+  @override
+  List<Object?> get props => [actionName, serviceType, serviceVersion, uri, controlPath, ...arguments.entries];
 }

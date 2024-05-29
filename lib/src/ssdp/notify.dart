@@ -11,15 +11,15 @@ class Notify with EquatableMixin {
   /// All headers in this notification.
   UnmodifiableMapView<String, String> get headers => _headers;
 
-  factory Notify.fromData(
-    String data,
+  factory Notify.parse(
+    String str,
   ) {
     final headers = <String, String>{};
-    for (var segment in data.split('\r\n')) {
+    for (var segment in str.split('\r\n')) {
       final colon = segment.indexOf(':');
 
       if (colon == -1) {
-        log('warn', 'Improper header format', {
+        Log.warn('Improper header format', {
           'value': segment,
         });
         continue;
@@ -32,7 +32,7 @@ class Notify with EquatableMixin {
     }
 
     return Notify(
-      data,
+      str,
       UnmodifiableMapView(headers),
     );
   }

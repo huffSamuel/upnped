@@ -5,7 +5,7 @@ class Server {
   static Server? _instance;
 
   static Server _createInstance() {
-    log('info', 'upnped starting.... logging is disabled in non-debug modes');
+    Log.info('upnped starting.... logging is disabled in non-debug modes');
     return Server._(
       ssdpServer: ssdp.Server(),
       deviceBuilder: DeviceManager(),
@@ -105,7 +105,7 @@ class Server {
       case < 1:
         throw InvalidResponseTimeError();
       case > 5:
-        log('warn', 'max response time should not be greater than 5 seconds');
+        Log.warn('max response time should not be greater than 5 seconds');
         break;
     }
 

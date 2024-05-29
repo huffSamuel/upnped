@@ -8,7 +8,7 @@ Duration? parseMaxAge(String? cacheControl) {
   if (directives.isEmpty) {
     return null;
   }
-  final maxAge = directives.single.split('=')[1];
+  final maxAge = directives.last.split('=')[1];
 
   return Duration(seconds: int.parse(maxAge));
 }

@@ -8,7 +8,7 @@ Future<void> main() async {
     print('Discovered a device');
     print(event.description.friendlyName);
 
-    event.services.first.service!.actions.first.invoke({
+    event.services.first.description!.actions.first.invoke({
       'someArgFromList': 'foo'
     });
   });

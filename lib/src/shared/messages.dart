@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:upnped/src/ssdp/ssdp.dart';
+import 'package:upnped/src/utils/map_view_from_entries.dart';
 
 part 'messages/notification_subtype.dart';
 part 'messages/notify_alive.dart';

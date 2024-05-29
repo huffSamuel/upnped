@@ -12,6 +12,8 @@ abstract class SocketFactory {
 class RawDatagramSocketFactory implements SocketFactory {
   const RawDatagramSocketFactory();
 
+  // coverage:ignore-start
+  // Ignoring since we can't mock out the framework's static bind method. 
   @override
   Future<RawDatagramSocket> create(
     InternetAddress address,
@@ -24,6 +26,7 @@ class RawDatagramSocketFactory implements SocketFactory {
       reusePort: !(Platform.isAndroid || Platform.isWindows),
     );
   }
+  // coverage:ignore-end
 }
 
 class SocketBuilder {
@@ -55,14 +58,17 @@ class SocketBuilder {
     try {
       socket.joinMulticast(group);
     } on OSError {
-      // TODO: Verbose log error
+      Log.warn(
+          'Socket failed to join multicast group. So long as a single socket joins, this is not a critical error.');
     }
 
     for (var interface in interfaces) {
       try {
         socket.joinMulticast(group, interface);
       } on OSError {
-        // TODO: Verbose log error
+        Log.warn(
+          'Socket failed to join multicast group. So long as a single socket joins, this is not a critical error.',
+        );
       }
     }
 
