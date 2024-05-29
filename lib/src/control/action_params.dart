@@ -42,7 +42,14 @@ class ActionParams extends Equatable {
       arguments: arguments,
     );
   }
-  
+
   @override
-  List<Object?> get props => [actionName, serviceType, serviceVersion, uri, controlPath, ...arguments.entries];
+  List<Object?> get props => [
+        actionName,
+        serviceType,
+        serviceVersion,
+        uri,
+        controlPath,
+        ...arguments.entries
+      ];
 }
