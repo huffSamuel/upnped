@@ -34,7 +34,7 @@ jobs:
           token: ${{ secrets.codecov_token }}
 
       - name: Include in Release
-        uses: google-github-actions/release-please-action@v4
+        uses: googleapis/release-please-action@v4.1.1
         with:
           token: ${{ secrets.release_please_token }}
           release-type: dart
