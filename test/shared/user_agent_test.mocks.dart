@@ -129,9 +129,8 @@ class _FakeAndroidBuildVersion_8 extends _i1.SmartFake
         );
 }
 
-class _FakeAndroidDisplayMetrics_9 extends _i1.SmartFake
-    implements _i2.AndroidDisplayMetrics {
-  _FakeAndroidDisplayMetrics_9(
+class _FakeIosUtsname_9 extends _i1.SmartFake implements _i3.IosUtsname {
+  _FakeIosUtsname_9(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -140,18 +139,8 @@ class _FakeAndroidDisplayMetrics_9 extends _i1.SmartFake
         );
 }
 
-class _FakeIosUtsname_10 extends _i1.SmartFake implements _i3.IosUtsname {
-  _FakeIosUtsname_10(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeDateTime_11 extends _i1.SmartFake implements DateTime {
-  _FakeDateTime_11(
+class _FakeDateTime_10 extends _i1.SmartFake implements DateTime {
+  _FakeDateTime_10(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -725,19 +714,6 @@ class MockAndroidDeviceInfo extends _i1.Mock implements _i2.AndroidDeviceInfo {
       ) as List<String>);
 
   @override
-  _i2.AndroidDisplayMetrics get displayMetrics => (super.noSuchMethod(
-        Invocation.getter(#displayMetrics),
-        returnValue: _FakeAndroidDisplayMetrics_9(
-          this,
-          Invocation.getter(#displayMetrics),
-        ),
-        returnValueForMissingStub: _FakeAndroidDisplayMetrics_9(
-          this,
-          Invocation.getter(#displayMetrics),
-        ),
-      ) as _i2.AndroidDisplayMetrics);
-
-  @override
   String get serialNumber => (super.noSuchMethod(
         Invocation.getter(#serialNumber),
         returnValue: _i10.dummyValue<String>(
@@ -749,6 +725,13 @@ class MockAndroidDeviceInfo extends _i1.Mock implements _i2.AndroidDeviceInfo {
           Invocation.getter(#serialNumber),
         ),
       ) as String);
+
+  @override
+  bool get isLowRamDevice => (super.noSuchMethod(
+        Invocation.getter(#isLowRamDevice),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
 
   @override
   Map<String, dynamic> get data => (super.noSuchMethod(
@@ -909,11 +892,11 @@ class MockIosDeviceInfo extends _i1.Mock implements _i3.IosDeviceInfo {
   @override
   _i3.IosUtsname get utsname => (super.noSuchMethod(
         Invocation.getter(#utsname),
-        returnValue: _FakeIosUtsname_10(
+        returnValue: _FakeIosUtsname_9(
           this,
           Invocation.getter(#utsname),
         ),
-        returnValueForMissingStub: _FakeIosUtsname_10(
+        returnValueForMissingStub: _FakeIosUtsname_9(
           this,
           Invocation.getter(#utsname),
         ),
@@ -1261,11 +1244,11 @@ class MockWindowsDeviceInfo extends _i1.Mock implements _i7.WindowsDeviceInfo {
   @override
   DateTime get installDate => (super.noSuchMethod(
         Invocation.getter(#installDate),
-        returnValue: _FakeDateTime_11(
+        returnValue: _FakeDateTime_10(
           this,
           Invocation.getter(#installDate),
         ),
-        returnValueForMissingStub: _FakeDateTime_11(
+        returnValueForMissingStub: _FakeDateTime_10(
           this,
           Invocation.getter(#installDate),
         ),
