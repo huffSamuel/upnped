@@ -13,6 +13,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Set up dart
+        uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
 
@@ -22,5 +25,8 @@ jobs:
       - name: Build source
         run: dart run build_runner build
         
+      - name: Publish (dry run) 
+        run: dart pub publish --dry-run
+
       - name: Publish
         run: dart pub publish --force
