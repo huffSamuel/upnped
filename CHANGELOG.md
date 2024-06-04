@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/huffSamuel/upnped/compare/v1.0.0...v1.1.0) (2024-06-04)
+
+
+### Features
+
+* support device extensions properties ([a415537](https://github.com/huffSamuel/upnped/commit/a4155375d91ac9680f141efc1af2d109ab096e6d))
+* support device extensions properties ([198389c](https://github.com/huffSamuel/upnped/commit/198389c384606571e9a5dce0a360a7c8d5414fe6))
+
 ## 1.0.0 (2024-05-29)
 
 
