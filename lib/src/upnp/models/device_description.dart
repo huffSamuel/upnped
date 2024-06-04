@@ -54,6 +54,11 @@ class DeviceDescription {
   /// URL to presentation for this device.
   final Uri? presentationUrl;
 
+  /// Extension properties.
+  /// 
+  /// These provide manufacturer-specific information for non-UPnP spec behaviors.
+  final UnmodifiableListView<XmlElement> extensions;
+
   DeviceDescription._({
     required this.deviceType,
     required this.friendlyName,
@@ -70,6 +75,7 @@ class DeviceDescription {
     required this.services,
     required this.devices,
     this.presentationUrl,
+    required this.extensions,
   });
 
   factory DeviceDescription.fromXml(XmlNode xml) {
@@ -77,6 +83,8 @@ class DeviceDescription {
 
     final modelUrl = xml.getElement('modelURL');
     final manufacturerUrl = xml.getElement('manufacturerURL');
+
+    final extensions = xml.nodes.whereType<XmlElement>().where((x) => x.namespacePrefix != null).toList();
 
     return DeviceDescription._(
       deviceType: DeviceType(uri: xml.getElement('deviceType')!.innerText),
@@ -108,6 +116,7 @@ class DeviceDescription {
       ),
       presentationUrl:
           presentationUrl != null ? Uri.parse(presentationUrl.innerText) : null,
+      extensions: UnmodifiableListView(extensions),
     );
   }
 }
