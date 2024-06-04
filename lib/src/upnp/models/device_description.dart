@@ -55,7 +55,7 @@ class DeviceDescription {
   final Uri? presentationUrl;
 
   /// Extension properties.
-  /// 
+  ///
   /// These provide manufacturer-specific information for non-UPnP spec behaviors.
   final UnmodifiableListView<XmlElement> extensions;
 
@@ -84,7 +84,10 @@ class DeviceDescription {
     final modelUrl = xml.getElement('modelURL');
     final manufacturerUrl = xml.getElement('manufacturerURL');
 
-    final extensions = xml.nodes.whereType<XmlElement>().where((x) => x.namespacePrefix != null).toList();
+    final extensions = xml.nodes
+        .whereType<XmlElement>()
+        .where((x) => x.namespacePrefix != null)
+        .toList();
 
     return DeviceDescription._(
       deviceType: DeviceType(uri: xml.getElement('deviceType')!.innerText),
