@@ -47,7 +47,7 @@ class Log {
 /// Observes actions and events related to UPnP.
 class UPnPObserver {
   /// Network events sent/received by the UPnP server.
-  static get networkEvents => networkController.stream;
+  static Stream<NetworkEvent> get networkEvents => networkController.stream;
 
   /// Control non-debug mode logging.
   static bool loggingEnabled = false;
