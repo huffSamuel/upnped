@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/huffSamuel/upnped/compare/v1.1.0...v1.1.1) (2024-06-07)
+
+
+### Bug Fixes
+
+* network event stream typed correctly ([72ccdd3](https://github.com/huffSamuel/upnped/commit/72ccdd3f0fce2d45284760e5fc1a3909d94017f8))
+* network event stream typed correctly ([fcb2547](https://github.com/huffSamuel/upnped/commit/fcb25473506c87b6ad833fe5cf3e3f392bb80e13))
+
 ## [1.1.0](https://github.com/huffSamuel/upnped/compare/v1.0.0...v1.1.0) (2024-06-04)
 
 
