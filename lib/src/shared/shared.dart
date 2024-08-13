@@ -28,7 +28,7 @@ class Log {
     String message, [
     Map<String, dynamic>? properties,
   ]) {
-    if (!kDebugMode && !UPnPObserver.loggingEnabled) {
+    if (!(kDebugMode || UPnPObserver.loggingEnabled)) {
       return;
     }
 

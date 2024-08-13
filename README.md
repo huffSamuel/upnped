@@ -5,6 +5,16 @@ A Dart library for discovering and controlling UPnP devices.
 [![codecov](https://codecov.io/gh/huffSamuel/upnped/graph/badge.svg?token=VAFSPLCEQV)](https://codecov.io/gh/huffSamuel/upnped)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## Features
+
+This package is implemented around the UPnP 2.0 architecture and supports the following UPnP server features:
+
+- UPnP discovery
+- Device and Service information
+- Non-standard vendor extensions
+- Service control
+- Event monitoring
+
 ## Installation
 
 Install from pub with:
@@ -20,36 +30,28 @@ dependencies:
   upnped: <latest_version>
 ```
 
-## Usage
-
-### Discover devices
+## Quickstart
 
 ```dart
-final server = Server.getInstance();
+import 'package:upnped/upnped.dart';
 
-server.devices.listen((UPnPDevice event) {
-    print('Discovered a device: ${event}');
-});
+Future<void> main() async {
+  final server = Server.getInstance();
 
-await server.listen(Options{
-    locale: 'en',
-});
-await server.search();
+  server.devices.listen((Device event) {
+    print('Discovered a device: ${event});
+  });
+
+  await server.listen(Options());
+  await server.search();
+  await server.stop();
+}
 ```
 
-### Invoke actions
+## Documentation
 
-```dart
-final control = ControlPoint.getInstance();
-UPnPDevice device = getDevice();
-ServiceAction action = selectAction(device);
-Map<String, dynamic> actionArgs = collectArgs();
+Check out the [documentation](https://huffsamuel.github.io/upnped) or [examples](./example).
 
-action.invoke(control, actionArgs);us
-```
+## Contributing
 
-### Monitor UPnP Events
-
-```dart
-UPnPObserver.networkEvents.listen(print);
-```
+Find something that's missing? Feel free to open an [issue](https://github.com/huffSamuel/upnped/issues) or submit a pull request.

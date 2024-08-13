@@ -114,7 +114,8 @@ class Server {
       try {
         socket.send(data, target, _ssdpPort);
 
-        networkController.add(MSearchEvent(request.toString()));
+        final event = MSearchEvent(content: request.toString());
+        networkController.add(event);
       } on SocketException catch (e) {
         Log.error('Unable to send MSEARCH packet', {"exception": e});
       }
@@ -143,7 +144,11 @@ class Server {
       final notify = Notify.parse(data);
 
       final device = NotifyDiscovered(notify);
-      networkController.add(NotifyEvent(device.location!, notify.toString()));
+      final event = NotifyEvent(
+        device.location!,
+        content: notify.toString(),
+      );
+      networkController.add(event);
       _discoveredController.add(notify);
     } catch (err) {
       Log.error('Unable to parse packet as NOTIFY', {
