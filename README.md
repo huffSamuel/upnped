@@ -50,7 +50,7 @@ Future<void> main() async {
 
 ## Documentation
 
-Check out the [documentation](https://huffsamuel.github.io/upnped) or [examples](./example) for more information.
+Check out the [documentation](https://huffsamuel.github.io/upnped) or [examples](https://github.com/huffSamuel/upnped/tree/35b44100b06267b14943fb97e37d0a9da5390186/example) for more information.
 
 ## Contributing
 
