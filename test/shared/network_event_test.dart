@@ -14,7 +14,7 @@ void main() {
   group('MSearchEvent', () {
     group('constructor', () {
       test('should set the default properties', () {
-        final event = MSearchEvent('content');
+        final event = MSearchEvent(content: 'content');
 
         expect(event.direction, equals(NetworkEventDirection.outgoing));
         expect(event.protocol, equals(NetworkEventProtocol.ssdp));
@@ -26,7 +26,7 @@ void main() {
     group('toString', () {
       test('should return content', () {
         const expected = 'content';
-        final event = MSearchEvent(expected);
+        final event = MSearchEvent(content: expected);
 
         final actual = event.toString();
         expect(actual, equals(expected));
@@ -37,7 +37,7 @@ void main() {
   group('NotifyEvent', () {
     group('constructor', () {
       test('should set the default properties', () {
-        final event = NotifyEvent(Uri(host: 'test.com'), 'content');
+        final event = NotifyEvent(Uri(host: 'test.com'), content: 'content');
 
         expect(event.direction, equals(NetworkEventDirection.incoming));
         expect(event.protocol, NetworkEventProtocol.ssdp);
@@ -49,7 +49,7 @@ void main() {
     group('toString', () {
       test('should return content', () {
         const expected = 'content';
-        final event = NotifyEvent(Uri(host: 'test.com'), 'content');
+        final event = NotifyEvent(Uri(host: 'test.com'), content: 'content');
 
         final actual = event.toString();
         expect(actual, equals(expected));

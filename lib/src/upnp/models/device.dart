@@ -6,10 +6,13 @@ abstract class Device {
 
   /// Emits when the active state of this device changes.
   ///
-  /// Active state can be changed by the following events:
-  /// - Network `ssdp:byebye` event
-  /// - Network `ssdp:alive` event
-  /// - NOTIFY cache-control max-age elapsed
+  /// The device goes inactive when:
+  /// - The device emits an `ssdp:byebye` event
+  /// - The devices NOTIFY cache-control max-age elapses
+  /// 
+  /// The active state is refreshed when:
+  /// - The device emits an `ssdp:alive` event
+  /// - The device emits a NOTIFY event
   Stream<bool> get isActive => _activeController.stream;
 
   /// Notify that replied to the SSDP query.

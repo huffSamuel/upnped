@@ -13,6 +13,9 @@ enum NetworkEventDirection {
 
 /// A network event that occurred as part of UPnP discovery or control.
 abstract class NetworkEvent {
+  /// Content contained in this network event.
+  final String content;
+
   /// Direction of the event.
   final NetworkEventDirection direction;
 
@@ -35,51 +38,47 @@ abstract class NetworkEvent {
     required this.direction,
     required this.protocol,
     required this.type,
+    required this.content,
     this.from,
     this.to,
-  }) : time = DateTime.now();
-}
+    DateTime? time,
+  }) : time = time ?? DateTime.now();
 
-/// An M-SEARCH event that occurred as part of UPnP discovery.
-class MSearchEvent extends NetworkEvent {
-  /// Raw content of the M-SEARCH event.
-  final String content;
-
-  MSearchEvent(
-    this.content, {
-    super.direction = NetworkEventDirection.outgoing,
-    super.from = '127.0.0.1',
-  }) : super(
-          protocol: NetworkEventProtocol.ssdp,
-          type: 'M-SEARCH',
-        );
-
+  // TODO: This is part of the public API now for retrieving the content. That needs to be deprecated and removed in a future release.
   @override
-  toString() {
+  String toString() {
     return content;
   }
 }
 
+/// An M-SEARCH event that occurred as part of UPnP discovery.
+class MSearchEvent extends NetworkEvent {
+  MSearchEvent({
+    required super.content,
+    super.direction = NetworkEventDirection.outgoing,
+    super.from = '127.0.0.1',
+    super.time,
+  }) : super(
+          protocol: NetworkEventProtocol.ssdp,
+          type: 'M-SEARCH',
+        );
+}
+
 /// A NOTIFY event that occurred as part of UPnP discovery.
 class NotifyEvent extends NetworkEvent {
-  /// Raw content of the NOTIFY event.
-  final String content;
-
   /// URI where this event originated from.
   final Uri uri;
 
-  NotifyEvent(this.uri, this.content)
-      : super(
+  NotifyEvent(
+    this.uri, {
+    required super.content,
+    super.time,
+  }) : super(
           direction: NetworkEventDirection.incoming,
           protocol: NetworkEventProtocol.ssdp,
           type: 'NOTIFY',
           from: uri.host,
         );
-
-  @override
-  toString() {
-    return content;
-  }
 }
 
 /// An HTTP event that occurred as part of UPnP discovery or control.
@@ -97,20 +96,21 @@ class HttpEvent extends NetworkEvent {
       _body ??= XmlDocument.parse(response.body).toXmlString(pretty: true);
 
   HttpEvent(
-    this.response,
-  ) : super(
+    this.response, {
+    super.time,
+  }) : super(
           direction: NetworkEventDirection.outgoing,
           protocol: NetworkEventProtocol.http,
           type: 'HTTP ${response.request!.method}',
           from: '127.0.0.1',
           to: response.request!.url.host,
+          content: _resolveHttpEventContent(response),
         );
+}
 
-  @override
-  toString() {
-    var sb = StringBuffer('HTTP/1.1 ${response.statusCode}\n');
-    response.headers.forEach((k, v) => sb.writeln('$k: $v'));
-    sb.writeln(response.body);
-    return sb.toString();
-  }
+String _resolveHttpEventContent(http.Response response) {
+  var sb = StringBuffer('HTTP/1.1 ${response.statusCode}\n');
+  response.headers.forEach((k, v) => sb.writeln('$k: $v'));
+  sb.writeln(response.body);
+  return sb.toString();
 }
