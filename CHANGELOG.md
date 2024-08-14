@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.2](https://github.com/huffSamuel/upnped/compare/v1.1.1...v1.1.2) (2024-08-14)
+
+
+### Bug Fixes
+
+* better network event code ([2a37bfa](https://github.com/huffSamuel/upnped/commit/2a37bfad24c4a0043d5c0cccfc54dda0ecc704fe))
+* better network event code ([44d4597](https://github.com/huffSamuel/upnped/commit/44d4597524c797aa6cf9a5de1b59d270e9ce8624))
+* better network event code ([750c2eb](https://github.com/huffSamuel/upnped/commit/750c2ebf5eb2ae1a3d0209dc911ffb392f476df1))
+* dart format ([4d540a9](https://github.com/huffSamuel/upnped/commit/4d540a9dfba0bf08ca3178484f96bfb94ffc37ad))
+
 ## [1.1.1](https://github.com/huffSamuel/upnped/compare/v1.1.0...v1.1.1) (2024-06-07)
 
 
