@@ -11,4 +11,4 @@ const defaultSearchTarget = SearchTarget.rootDevice;
 /// The current system's locale.
 String get defaultLocale => Platform.localeName.substring(0, 2);
 
-const packageVersion = '1.0.0';
+const packageVersion = '1.1.2';

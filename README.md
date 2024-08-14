@@ -7,7 +7,7 @@ A Dart library for discovering and controlling UPnP devices.
 
 ## Features
 
-This package is implemented around the UPnP 2.0 architecture and supports the following UPnP server features:
+This package partially implements UPnP 2.0 architecture and supports the following UPnP server features:
 
 - UPnP discovery
 - Device and Service information
@@ -50,8 +50,8 @@ Future<void> main() async {
 
 ## Documentation
 
-Check out the [documentation](https://huffsamuel.github.io/upnped) or [examples](./example).
+Check out the [documentation](https://huffsamuel.github.io/upnped) or [examples](./example) for more information.
 
 ## Contributing
 
-Find something that's missing? Feel free to open an [issue](https://github.com/huffSamuel/upnped/issues) or submit a pull request.
+Something missing that you need? Open an [issue](https://github.com/huffSamuel/upnped/issues) or submit a pull request.
