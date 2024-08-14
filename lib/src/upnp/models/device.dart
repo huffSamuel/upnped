@@ -9,7 +9,7 @@ abstract class Device {
   /// The device goes inactive when:
   /// - The device emits an `ssdp:byebye` event
   /// - The devices NOTIFY cache-control max-age elapses
-  /// 
+  ///
   /// The active state is refreshed when:
   /// - The device emits an `ssdp:alive` event
   /// - The device emits a NOTIFY event
