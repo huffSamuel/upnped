@@ -8,8 +8,10 @@ class Action {
   /// Input and output arguments.
   final List<Argument>? arguments;
 
-  List<Argument> get inputs => arguments?.where((a) => a.direction == Direction.input).toList() ?? [];
-  List<Argument> get outputs => arguments?.where((a) => a.direction == Direction.output).toList() ?? [];
+  List<Argument> get inputs =>
+      arguments?.where((a) => a.direction == Direction.input).toList() ?? [];
+  List<Argument> get outputs =>
+      arguments?.where((a) => a.direction == Direction.output).toList() ?? [];
 
   late ServiceDescription _service;
 
