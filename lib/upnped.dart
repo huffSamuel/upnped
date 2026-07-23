@@ -11,6 +11,7 @@ export 'src/shared/shared.dart'
         NotifyEvent,
         MSearchEvent,
         NetworkEventDirection,
+        NetworkEventType,
         NetworkEventProtocol;
 export 'src/ssdp/ssdp.dart' show SearchTarget;
 export 'src/upnp/upnp.dart' hide DeviceManager;

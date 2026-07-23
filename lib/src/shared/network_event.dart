@@ -11,6 +11,20 @@ enum NetworkEventDirection {
   outgoing,
 }
 
+class NetworkEventType {
+  static const msearch = 'M-SEARCH';
+  static const notify = 'NOTIFY';
+  static const httpPost = 'HTTP POST';
+  static const httpGet = 'HTTP GET';
+
+  static const List<String> all = [
+    msearch,
+    notify,
+    httpPost,
+    httpGet,
+  ];
+}
+
 /// A network event that occurred as part of UPnP discovery or control.
 abstract class NetworkEvent {
   /// Content contained in this network event.
@@ -60,7 +74,7 @@ class MSearchEvent extends NetworkEvent {
     super.time,
   }) : super(
           protocol: NetworkEventProtocol.ssdp,
-          type: 'M-SEARCH',
+          type: NetworkEventType.msearch,
         );
 }
 
@@ -76,7 +90,7 @@ class NotifyEvent extends NetworkEvent {
   }) : super(
           direction: NetworkEventDirection.incoming,
           protocol: NetworkEventProtocol.ssdp,
-          type: 'NOTIFY',
+          type: NetworkEventType.notify,
           from: uri.host,
         );
 }
@@ -92,8 +106,15 @@ class HttpEvent extends NetworkEvent {
   String? _body;
 
   /// The formatted response body.
-  String get responseBody =>
-      _body ??= XmlDocument.parse(response.body).toXmlString(pretty: true);
+  String? get responseBody => _body ??= response.body.isNotEmpty
+      ? XmlDocument.parse(response.body).toXmlString(pretty: true)
+      : null;
+
+  bool isSuccess() {
+    return response.statusCode >= 200 && response.statusCode <= 299;
+  }
+
+  bool isError() => !isSuccess();
 
   HttpEvent(
     this.response, {
@@ -101,7 +122,10 @@ class HttpEvent extends NetworkEvent {
   }) : super(
           direction: NetworkEventDirection.outgoing,
           protocol: NetworkEventProtocol.http,
-          type: 'HTTP ${response.request!.method}',
+          type: switch (response.request!.method) {
+            'POST' => NetworkEventType.httpPost,
+            _ => NetworkEventType.httpGet,
+          },
           from: '127.0.0.1',
           to: response.request!.url.host,
           content: _resolveHttpEventContent(response),

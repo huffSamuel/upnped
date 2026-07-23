@@ -57,6 +57,10 @@ class ControlPoint {
 
     networkController.add(HttpEvent(response));
 
+    if (response.body.isEmpty) {
+      throw ActionInvocationException(response.reasonPhrase ?? 'Unknown', response.statusCode.toString());
+    }
+
     final xml = XmlDocument.parse(response.body);
 
     if (isFault(xml)) {
