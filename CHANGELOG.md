@@ -6,6 +6,20 @@
 
 * Correct examples for pub.dev.
 
+## [1.2.0](https://github.com/huffSamuel/upnped/compare/v1.1.2...v1.2.0) (2026-07-23)
+
+
+### Features
+
+* convenience getters for action arguments ([c54edf7](https://github.com/huffSamuel/upnped/commit/c54edf7cf2a71dfa1ff81a01ee5ece50f1d236bf))
+* expose known network event types ([c54edf7](https://github.com/huffSamuel/upnped/commit/c54edf7cf2a71dfa1ff81a01ee5ece50f1d236bf))
+* throw ActionInvocationException with reason phrase on invoke error ([c54edf7](https://github.com/huffSamuel/upnped/commit/c54edf7cf2a71dfa1ff81a01ee5ece50f1d236bf))
+
+
+### Bug Fixes
+
+* build warnings ([d91060a](https://github.com/huffSamuel/upnped/commit/d91060abc6328756edb3fab15f65b769c58e2afa))
+
 ## [1.1.2](https://github.com/huffSamuel/upnped/compare/v1.1.1...v1.1.2) (2024-08-14)
 
 
