@@ -697,6 +697,7 @@ class MockRequest extends _i1.Mock implements _i2.Request {
 /// A class which mocks [NotifyDiscovered].
 ///
 /// See the documentation for Mockito's code generation for more information.
+// ignore: must_be_immutable
 class MockNotifyDiscovered extends _i1.Mock implements _i9.NotifyDiscovered {
   @override
   String get st => (super.noSuchMethod(
