@@ -6,7 +6,7 @@
 
 * Correct examples for pub.dev.
 
-## [1.2.0](https://github.com/huffSamuel/upnped/compare/v1.1.2...v1.2.0) (2026-07-23)
+## [1.2.0+2](https://github.com/huffSamuel/upnped/compare/v1.1.2...v1.2.0) (2026-07-23)
 
 
 ### Features
