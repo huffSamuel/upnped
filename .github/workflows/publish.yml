@@ -1,6 +1,9 @@
 name: Publish to pub.dev
 
 on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  
   push:
     tags:
     - 'v[0-9]+.[0-9]+.[0-9]+*' # tag pattern on pub.dev: 'v{{version}'
