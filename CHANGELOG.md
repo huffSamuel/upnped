@@ -1,10 +1,10 @@
 # Changelog
 
-# [1.1.2+1](https://github.com/huffSamuel/upnped/compare/v1.1.1...v1.1.2) (2024-08-14)
+## [1.3.0+3](https://github.com/huffSamuel/upnped/compare/v1.2.0...v1.3.0) (2026-07-23)
 
-### Documentation
+### Chores
 
-* Correct examples for pub.dev.
+* publish new version
 
 ## [1.3.0](https://github.com/huffSamuel/upnped/compare/v1.2.0...v1.3.0) (2026-07-24)
 
@@ -15,7 +15,6 @@
 * release 1.3.0 ([03f471f](https://github.com/huffSamuel/upnped/commit/03f471f23d8a94aede409d5473fe5ab879a8dde0))
 
 ## [1.2.0+2](https://github.com/huffSamuel/upnped/compare/v1.1.2...v1.2.0) (2026-07-23)
-
 
 ### Features
 
@@ -60,7 +59,6 @@
 * network events ([8bd14e0](https://github.com/huffSamuel/upnped/commit/8bd14e035fe5e09f51195422c0170fd685562947))
 * support basic upnp 2.0 ([e885eaf](https://github.com/huffSamuel/upnped/commit/e885eaf77e78d6b34cf93224100f6616c7eaebc0))
 
-## Changelog
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
