@@ -6,6 +6,14 @@
 
 * Correct examples for pub.dev.
 
+## [1.3.0](https://github.com/huffSamuel/upnped/compare/v1.2.0...v1.3.0) (2026-07-24)
+
+
+### Miscellaneous Chores
+
+* release 1.3.0 ([82b6ae0](https://github.com/huffSamuel/upnped/commit/82b6ae0dce46bbe4cc73a8c8d0ac7fbc06f8269a))
+* release 1.3.0 ([03f471f](https://github.com/huffSamuel/upnped/commit/03f471f23d8a94aede409d5473fe5ab879a8dde0))
+
 ## [1.2.0+2](https://github.com/huffSamuel/upnped/compare/v1.1.2...v1.2.0) (2026-07-23)
 
 
